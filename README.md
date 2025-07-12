@@ -43,8 +43,6 @@ The goal is to promote sustainable fashion and reduce textile waste by enabling 
 
 ## 📸 Screenshots
 
-> 💡 Replace these links with your actual screenshot URLs.
-
 ### Landing Page
 
 ![Landing Page](https://your-image-url.com/landing-page.png)
