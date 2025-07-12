@@ -1,5 +1,6 @@
 <h1>ReWear</h1>
 Community Clothing Exchange 
+<br>
 Overview: 
 Develop ReWear, a web-based platform that enables users to exchange unused clothing 
 through direct swaps or a point-based redemption system. The goal is to promote sustainable 
