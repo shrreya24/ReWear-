@@ -5,7 +5,7 @@ class APIService {
         this.USE_FAKE_API = true;
         
         // Real API base URL - change this to your actual API
-        this.BASE_URL = 'https://your-api-domain.com/api';
+        this.BASE_URL = 'http://localhost:5000/api';
         
         // Initialize fake database if using fake API
         if (this.USE_FAKE_API) {
@@ -74,6 +74,13 @@ class APIService {
                 if (method === 'PUT') {
                     return this.fakeDB.updateUser(1, body);
                 }
+            case '/swap/incoming':
+    return this.fakeDB.getSwapRequests(1);
+
+case '/swap/respond':
+    if (method === 'POST') {
+        return this.fakeDB.respondToSwapRequest(body.requestId, body.decision);
+    }
                 break;
             
             default:
@@ -115,6 +122,17 @@ class APIService {
     }
 
     // Listing API methods
+    // Swap API methods
+async getSwapRequests() {
+    return this.makeRequest('/swap/incoming');
+}
+
+async respondToSwapRequest(requestId, decision) {
+    return this.makeRequest('/swap/respond', {
+        method: 'POST',
+        body: JSON.stringify({ requestId, decision })
+    });
+}
     async createListing(listingData) {
         return this.makeRequest('/listings', {
             method: 'POST',
@@ -146,9 +164,8 @@ class APIService {
 
     // Get auth token (implement based on your auth system)
     getAuthToken() {
-        // For now, return fake token
-        return 'fake-jwt-token';
-    }
+    return localStorage.getItem('userToken') || 'fake-jwt-token';
+}
 }
 
 // ===========================================
@@ -233,6 +250,14 @@ class FakeDatabase {
                         interested: 1
                     }
                 ],
+                swapRequests: [
+    {
+        _id: 1,
+        requesterId: { fullName: 'Sarah Johnson', email: 'sarah@example.com' },
+        itemId: { title: 'Designer Handbag' },
+        status: 'pending'
+    }
+],
                 purchases: [
                     {
                         id: 1,
@@ -311,6 +336,21 @@ class FakeDatabase {
         }
         throw new Error('User not found');
     }
+    getSwapRequests(userId) {
+    const data = this.getData();
+    return data.swapRequests || [];
+}
+
+respondToSwapRequest(requestId, decision) {
+    const data = this.getData();
+    const requestIndex = data.swapRequests.findIndex(req => req._id === requestId);
+    if (requestIndex !== -1) {
+        data.swapRequests[requestIndex].status = decision;
+        this.saveData(data);
+        return { message: `Request ${decision} successfully` };
+    }
+    throw new Error('Request not found');
+}
 
     // Listing methods
     getUserListings(userId) {
@@ -378,6 +418,7 @@ class ReWearDashboard {
         this.userListings = [];
         this.userPurchases = [];
         this.isLoading = false;
+        this.swapRequests = [];
         
         // Initialize API service
         this.api = new APIService();
@@ -399,6 +440,7 @@ class ReWearDashboard {
             
             // Load purchases via API
             await this.loadUserPurchases();
+            await this.loadSwapRequests();
             
             // Setup event listeners
             this.setupEventListeners();
@@ -458,6 +500,66 @@ class ReWearDashboard {
             throw error;
         }
     }
+    async loadSwapRequests() {
+    try {
+        this.swapRequests = await this.api.getSwapRequests();
+        this.renderSwapRequests();
+    } catch (error) {
+        console.error('Error loading swap requests:', error);
+        const container = document.getElementById('swap-requests-list');
+        if (container) {
+            container.innerHTML = '<p>❌ Could not load requests</p>';
+        }
+    }
+}
+
+renderSwapRequests() {
+    const container = document.getElementById('swap-requests-list');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    if (this.swapRequests.length === 0) {
+        container.innerHTML = '<p>No new swap requests </p>';
+        return;
+    }
+    
+    this.swapRequests.forEach(req => {
+        const card = document.createElement('div');
+        card.className = 'request-card';
+        card.innerHTML = `
+            <div class="request-info">
+                <p><strong>From:</strong> ${req.requesterId.fullName} (${req.requesterId.email})</p>
+                <p><strong>Item:</strong> ${req.itemId.title}</p>
+                <p><strong>Status:</strong> ${req.status}</p>
+            </div>
+            ${req.status === 'pending' ? `
+                <div class="request-buttons">
+                    <button class="accept-btn" onclick="dashboard.respondToRequest('${req._id}', 'accepted')">Accept</button>
+                    <button class="reject-btn" onclick="dashboard.respondToRequest('${req._id}', 'rejected')">Reject</button>
+                </div>
+            ` : ''}
+        `;
+        container.appendChild(card);
+    });
+}
+
+async respondToRequest(requestId, decision) {
+    try {
+        this.showLoading();
+        
+        await this.api.respondToSwapRequest(requestId, decision);
+        
+        this.showNotification(`✅ Request ${decision}`, 'success');
+        await this.loadSwapRequests(); // Refresh
+        
+    } catch (error) {
+        console.error('Error responding:', error);
+        this.showError('❌ Something went wrong.');
+    } finally {
+        this.hideLoading();
+    }
+}
 
     // Update user UI elements
     updateUserUI() {

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReWear Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="admin-styles.css">
+</head>
+<body>
+    <!-- Admin Header -->
+    <header class="admin-header">
+        <div class="admin-header-content">
+            <div class="admin-logo">
+                <i class="fas fa-shield-alt"></i>
+                <span>ReWear Admin</span>
+            </div>
+            <div class="admin-nav">
+                <button class="nav-btn active" data-section="pending">
+                    <i class="fas fa-clock"></i>
+                    <span>Pending Items</span>
+                    <span class="badge" id="pending-count">0</span>
+                </button>
+                <button class="nav-btn" data-section="approved">
+                    <i class="fas fa-check"></i>
+                    <span>Approved</span>
+                </button>
+                <button class="nav-btn" data-section="rejected">
+                    <i class="fas fa-times"></i>
+                    <span>Rejected</span>
+                </button>
+                <button class="nav-btn" data-section="users">
+                    <i class="fas fa-users"></i>
+                    <span>Users</span>
+                </button>
+            </div>
+            <div class="admin-user">
+                <img src="https://via.placeholder.com/40x40/4CAF50/FFFFFF?text=A" alt="Admin" class="admin-avatar">
+                <span>Admin Panel</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Admin Main Content -->
+    <main class="admin-main">
+        <!-- Pending Items Section -->
+        <section class="admin-section active" id="pending-section">
+            <div class="section-header">
+                <h2>Pending Item Approvals</h2>
+                <div class="section-controls">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search items..." id="search-pending">
+                    </div>
+                    <select id="category-filter">
+                        <option value="">All Categories</option>
+                        <option value="Tops">Tops</option>
+                        <option value="Bottoms">Bottoms</option>
+                        <option value="Outerwear">Outerwear</option>
+                        <option value="Dresses">Dresses</option>
+                        <option value="Footwear">Footwear</option>
+                        <option value="Accessories">Accessories</option>
+                    </select>
+                </div>
+            </div>
+            <div class="items-grid" id="pending-items"></div>
+        </section>
+
+        <!-- Approved Items Section -->
+        <section class="admin-section" id="approved-section">
+            <div class="section-header">
+                <h2>Approved Items</h2>
+                <div class="section-controls">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search approved items..." id="search-approved">
+                    </div>
+                </div>
+            </div>
+            <div class="items-grid" id="approved-items"></div>
+        </section>
+
+        <!-- Rejected Items Section -->
+        <section class="admin-section" id="rejected-section">
+            <div class="section-header">
+                <h2>Rejected Items</h2>
+                <div class="section-controls">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search rejected items..." id="search-rejected">
+                    </div>
+                </div>
+            </div>
+            <div class="items-grid" id="rejected-items"></div>
+        </section>
+
+        <!-- Users Section -->
+        <section class="admin-section" id="users-section">
+            <div class="section-header">
+                <h2>User Management</h2>
+                <div class="section-controls">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search users..." id="search-users">
+                    </div>
+                    <select id="user-filter">
+                        <option value="">All Users</option>
+                        <option value="active">Active</option>
+                        <option value="suspended">Suspended</option>
+                    </select>
+                </div>
+            </div>
+            <div class="users-list" id="users-list"></div>
+        </section>
+    </main>
+
+    <!-- Item Detail Modal -->
+    <div class="modal" id="item-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Item Details</h3>
+                <button class="modal-close" onclick="closeItemModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="item-detail-grid">
+                    <div class="item-image-container">
+                        <img src="" alt="Item" class="item-detail-image">
+                    </div>
+                    <div class="item-info">
+                        <h4 class="item-title"></h4>
+                        <p class="item-description"></p>
+                        <div class="item-specs">
+                            <div class="spec-item">
+                                <strong>Category:</strong> <span class="item-category"></span>
+                            </div>
+                            <div class="spec-item">
+                                <strong>Size:</strong> <span class="item-size"></span>
+                            </div>
+                            <div class="spec-item">
+                                <strong>Condition:</strong> <span class="item-condition"></span>
+                            </div>
+                            <div class="spec-item">
+                                <strong>Listed by:</strong> <span class="item-user"></span>
+                            </div>
+                            <div class="spec-item">
+                                <strong>Date:</strong> <span class="item-date"></span>
+                            </div>
+                        </div>
+                        <div class="admin-actions">
+                            <button class="btn btn-success" onclick="approveItem()">
+                                <i class="fas fa-check"></i> Approve
+                            </button>
+                            <button class="btn btn-danger" onclick="rejectItem()">
+                                <i class="fas fa-times"></i> Reject
+                            </button>
+                            <button class="btn btn-secondary" onclick="closeItemModal()">
+                                <i class="fas fa-eye-slash"></i> Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reject Reason Modal -->
+    <div class="modal" id="reject-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Reject Item</h3>
+                <button class="modal-close" onclick="closeRejectModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Please select a reason for rejecting this item:</p>
+                <div class="reject-reasons">
+                    <label class="reason-option">
+                        <input type="radio" name="reject-reason" value="inappropriate">
+                        <span>Inappropriate content</span>
+                    </label>
+                    <label class="reason-option">
+                        <input type="radio" name="reject-reason" value="spam">
+                        <span>Spam or fake listing</span>
+                    </label>
+                    <label class="reason-option">
+                        <input type="radio" name="reject-reason" value="quality">
+                        <span>Poor image quality</span>
+                    </label>
+                    <label class="reason-option">
+                        <input type="radio" name="reject-reason" value="description">
+                        <span>Incomplete description</span>
+                    </label>
+                    <label class="reason-option">
+                        <input type="radio" name="reject-reason" value="other">
+                        <span>Other</span>
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label for="reject-comment">Additional comments (optional):</label>
+                    <textarea id="reject-comment" rows="3" placeholder="Enter additional details..."></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button class="btn btn-secondary" onclick="closeRejectModal()">Cancel</button>
+                    <button class="btn btn-danger" onclick="confirmReject()">Reject Item</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Loading...</p>
+        </div>
+    </div>
+
+    <!-- Notification Container -->
+    <div class="notification-container" id="notification-container"></div>
+
+    <script src="admin-script.js"></script>
+</body>
+</html>
