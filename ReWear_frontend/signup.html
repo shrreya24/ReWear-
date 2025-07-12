@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign Up - SwapCommunity</title>
+  <link rel="stylesheet" href="signup.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="auth-container">
+    <div class="auth-left">
+      <div class="logo-circle">
+        <div class="swap-icon">⇄</div>
+      </div>
+      <h1>Join SwapCommunity</h1>
+      <p>Start swapping items with your neighbors today</p>
+    </div>
+
+    <div class="auth-right">
+      <div class="form-container">
+        <form class="auth-form" id="signupForm">
+          <div class="form-section active" id="section1">
+            <h3>Create Your Account</h3>
+            
+            <label>Full Name</label>
+            <input type="text" placeholder="Enter your full name" required />
+
+            <label>Email</label>
+            <input type="email" placeholder="example@mail.com" required />
+
+            <label>Password</label>
+            <input type="password" placeholder="Create a password" required />
+
+            <label>Confirm Password</label>
+            <input type="password" placeholder="Re-enter your password" required />
+
+            <button type="button" class="next-btn" onclick="nextSection()">Continue</button>
+          </div>
+
+          <div class="form-section" id="section2">
+            <h3>Location Details</h3>
+            
+            <label>State</label>
+            <select required>
+              <option value="">Select your state</option>
+              <option>Andhra Pradesh</option>
+              <option>Karnataka</option>
+              <option>Maharashtra</option>
+              <option>Delhi</option>
+              <option>Tamil Nadu</option>
+            </select>
+
+            <label>Pincode (Optional)</label>
+            <input type="text" placeholder="6-digit pincode" pattern="[0-9]{6}" />
+            
+            <label>Profile Picture (Optional)</label>
+            <div class="file-upload">
+              <input type="file" id="profilePic" accept="image/*" />
+              <label for="profilePic">Choose file</label>
+              <span id="fileName">No file chosen</span>
+            </div>
+            
+            <div class="terms">
+              <input type="checkbox" required />
+              <label>I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label>
+            </div>
+
+            <div class="button-group">
+              <button type="button" class="back-btn" onclick="prevSection()">Back</button>
+              <button type="submit" class="signup-btn">Create Account</button>
+            </div>
+          </div>
+
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressBar"></div>
+          </div>
+          
+          <p class="switch-auth">Already have an account? <a href="login.html">Log in</a></p>
+        </form>
+      </div>
+    </div>
+  </div>
+
+ <script>
+  let currentSection = 1;
+
+  function nextSection() {
+    if (currentSection < 2) {
+      document.getElementById('section' + currentSection).classList.remove('active');
+      currentSection++;
+      document.getElementById('section' + currentSection).classList.add('active');
+      updateProgressBar();
+    }
+  }
+
+  function prevSection() {
+    if (currentSection > 1) {
+      document.getElementById('section' + currentSection).classList.remove('active');
+      currentSection--;
+      document.getElementById('section' + currentSection).classList.add('active');
+      updateProgressBar();
+    }
+  }
+
+  function updateProgressBar() {
+    const progress = (currentSection / 2) * 100;
+    document.getElementById('progressBar').style.width = progress + '%';
+  }
+
+  // File name preview
+  document.getElementById('profilePic').addEventListener('change', function(e) {
+    const fileName = e.target.files[0] ? e.target.files[0].name : 'No file chosen';
+    document.getElementById('fileName').textContent = fileName;
+  });
+
+  // 🚀 Connect to backend on form submit
+  document.getElementById('signupForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const fullName = document.querySelector('input[placeholder="Enter your full name"]').value;
+    const email = document.querySelector('input[type="email"]').value;
+    const password = document.querySelector('input[placeholder="Create a password"]').value;
+    const confirmPassword = document.querySelector('input[placeholder="Re-enter your password"]').value;
+    const location = document.querySelector('select').value;
+    const pincode = document.querySelector('input[placeholder="6-digit pincode"]').value;
+
+    if (password !== confirmPassword) {
+      alert("❌ Passwords do not match.");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ fullName, email, password, location, pincode })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert("✅ Signup successful!");
+        localStorage.setItem("userToken", data.token);
+        window.location.href = "dashboard.html";
+      } else {
+        alert("❌ " + (data.message || "Signup failed."));
+      }
+
+    } catch (err) {
+      console.error("Signup Error:", err);
+      alert("❌ Server error. Please try again later.");
+    }
+  });
+
+  // Initial progress fill
+  updateProgressBar();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ReWear - Browse Sustainable Fashion</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-green: #4CAF50;
+      --dark-green: #2E8B57;
+      --light-green: #E8F5E9;
+      --cream: #F5F5F0;
+      --beige: #D9CBA3;
+      --clay: #D87D4A;
+      --charcoal: #333333;
+      --white: #ffffff;
+      --shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, var(--light-green) 0%, var(--cream) 100%);
+      color: var(--charcoal);
+      min-height: 100vh;
+      padding: 20px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 300px;
+      background: linear-gradient(135deg, var(--primary-green) 0%, var(--dark-green) 100%);
+      z-index: -1;
+      border-radius: 0 0 40px 40px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* Header Styles */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 0;
+      margin-bottom: 40px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-img {
+      height: 40px;
+    }
+
+    .logo-text {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--white);
+      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .nav-controls {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .nav-btn {
+      padding: 10px 20px;
+      border-radius: 30px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 15px;
+    }
+
+    .login-btn {
+      background: transparent;
+      border: 2px solid var(--white);
+      color: var(--white);
+    }
+
+    .login-btn:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .signup-btn {
+      background: var(--white);
+      color: var(--primary-green);
+      border: none;
+      box-shadow: var(--shadow);
+    }
+
+    .signup-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
+    }
+
+    /* Page Title */
+    .page-header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .section-title {
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 15px;
+      position: relative;
+      display: inline-block;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 4px;
+      background: var(--white);
+      border-radius: 2px;
+    }
+
+    .section-subtitle {
+      font-size: 18px;
+      color: rgba(255, 255, 255, 0.9);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Filter Section */
+    .filter-section {
+      background: var(--white);
+      border-radius: 20px;
+      padding: 25px;
+      margin-bottom: 40px;
+      box-shadow: var(--shadow);
+    }
+
+    .filter-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .filter-title {
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--charcoal);
+    }
+
+    .filter-reset {
+      color: var(--primary-green);
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .filter-reset:hover {
+      color: var(--dark-green);
+      text-decoration: underline;
+    }
+
+    .filter-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .filter-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: #666;
+      margin-bottom: 8px;
+    }
+
+    .filter-select {
+      padding: 12px 15px;
+      border-radius: 12px;
+      border: 1px solid #ddd;
+      background: var(--cream);
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .filter-select:focus {
+      outline: none;
+      border-color: var(--primary-green);
+      box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+    }
+
+    /* Item Grid */
+    .item-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+      margin-bottom: 60px;
+    }
+
+    .item-card {
+      background: var(--white);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .item-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .item-image-container {
+      position: relative;
+      height: 240px;
+      overflow: hidden;
+    }
+
+    .item-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .item-card:hover .item-image {
+      transform: scale(1.1);
+    }
+
+    .item-badge {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: linear-gradient(135deg, var(--primary-green), var(--dark-green));
+      color: var(--white);
+      padding: 6px 15px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      z-index: 2;
+    }
+
+    .item-content {
+      padding: 20px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .item-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--charcoal);
+      margin-bottom: 10px;
+    }
+
+    .item-description {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 15px;
+      flex: 1;
+    }
+
+    .item-meta {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      font-size: 13px;
+      color: #777;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .item-points {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--primary-green);
+      margin-bottom: 15px;
+    }
+
+    .interested-btn {
+      background: linear-gradient(135deg, var(--primary-green), var(--dark-green));
+      border: none;
+      border-radius: 12px;
+      color: var(--white);
+      font-weight: 600;
+      padding: 14px;
+      width: 100%;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+    }
+
+    .interested-btn:hover {
+      background: linear-gradient(135deg, #45A049, #2E8B57);
+      box-shadow: 0 8px 25px rgba(46, 139, 87, 0.4);
+      transform: translateY(-3px);
+    }
+
+    .interested-btn:active {
+      transform: translateY(1px);
+    }
+
+    /* Footer */
+    .footer {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 30px;
+      text-align: center;
+      margin-top: 30px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .footer-text {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 10px;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 25px;
+      margin-top: 15px;
+    }
+
+    .footer-link {
+      color: var(--primary-green);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .footer-link:hover {
+      color: var(--dark-green);
+      text-decoration: underline;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .header {
+        flex-direction: column;
+        gap: 20px;
+      }
+      
+      .section-title {
+        font-size: 28px;
+      }
+      
+      .section-subtitle {
+        font-size: 16px;
+      }
+      
+      .filter-options {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 15px;
+      }
+      
+      .item-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .section-title {
+        font-size: 24px;
+      }
+    }
+
+    /* Animation */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .item-card {
+      animation: fadeIn 0.6s ease forwards;
+      opacity: 0;
+    }
+
+    .item-card:nth-child(1) { animation-delay: 0.1s; }
+    .item-card:nth-child(2) { animation-delay: 0.2s; }
+    .item-card:nth-child(3) { animation-delay: 0.3s; }
+    .item-card:nth-child(4) { animation-delay: 0.4s; }
+    .item-card:nth-child(5) { animation-delay: 0.5s; }
+    .item-card:nth-child(6) { animation-delay: 0.6s; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <div class="logo">
+        <img src="https://i.imgur.com/7Z7vZQt.png" alt="ReWear Logo" class="logo-img">
+        <span class="logo-text">ReWear</span>
+      </div>
+      <div class="nav-controls">
+        <button class="nav-btn login-btn">
+          <i class="fas fa-user"></i> My Account
+        </button>
+        <button class="nav-btn signup-btn">
+          <i class="fas fa-plus"></i> List Item
+        </button>
+      </div>
+    </div>
+
+    <!-- Page Header -->
+    <div class="page-header">
+      <h1 class="section-title">Browse Sustainable Fashion</h1>
+      <p class="section-subtitle">Discover pre-loved treasures and give clothes a second life</p>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="filter-section">
+      <div class="filter-header">
+        <h2 class="filter-title">Filter Items</h2>
+        <span class="filter-reset">Reset Filters</span>
+      </div>
+      <div class="filter-options">
+        <div class="filter-group">
+          <label class="filter-label">Category</label>
+          <select class="filter-select">
+            <option>All Categories</option>
+            <option>Tops</option>
+            <option>Bottoms</option>
+            <option>Dresses</option>
+            <option>Outerwear</option>
+            <option>Accessories</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label class="filter-label">Size</label>
+          <select class="filter-select">
+            <option>All Sizes</option>
+            <option>XS</option>
+            <option>S</option>
+            <option>M</option>
+            <option>L</option>
+            <option>XL</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label class="filter-label">Condition</label>
+          <select class="filter-select">
+            <option>Any Condition</option>
+            <option>New</option>
+            <option>Like New</option>
+            <option>Good</option>
+            <option>Fair</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label class="filter-label">Price Range</label>
+          <select class="filter-select">
+            <option>All Prices</option>
+            <option>0-500 points</option>
+            <option>500-1000 points</option>
+            <option>1000-2000 points</option>
+            <option>2000+ points</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Item Grid -->
+    <div class="item-grid">
+      <!-- Item 1 -->
+      <div class="item-card">
+        <div class="item-image-container">
+          <img src="https://images.unsplash.com/photo-1601924994987-69e26d50dc26?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80" alt="Denim Jacket" class="item-image">
+          <span class="item-badge">Like New</span>
+        </div>
+        <div class="item-content">
+          <h3 class="item-title">Vintage Denim Jacket</h3>
+          <p class="item-description">Classic blue denim jacket with a timeless look. Perfect for layering in any season.</p>
+          <div class="item-meta">
+            <span class="meta-item"><i class="fas fa-ruler"></i> Size M</span>
+            <span class="meta-item"><i class="fas fa-history"></i> 2 years</span>
+          </div>
+          <div class="item-points">
+            <i class="fas fa-coins"></i> 1200 points
+          </div>
+          <button onclick="sendSwapRequest('ITEM_ID_1')" class="interested-btn">
+            <i class="fas fa-exchange-alt"></i> Request Swap
+          </button>
+        </div>
+      </div>
+
+      <!-- Item 2 -->
+      <div class="item-card">
+        <div class="item-image-container">
+          <img src="https://images.unsplash.com/photo-1617137968427-85924c800a22?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80" alt="Cotton Kurta" class="item-image">
+          <span class="item-badge">Excellent</span>
+        </div>
+        <div class="item-content">
+          <h3 class="item-title">Embroidered Cotton Kurta</h3>
+          <p class="item-description">Hand-embroidered white cotton kurta with traditional patterns. Lightweight and breathable.</p>
+          <div class="item-meta">
+            <span class="meta-item"><i class="fas fa-ruler"></i> Size L</span>
+            <span class="meta-item"><i class="fas fa-history"></i> 1 year</span>
+          </div>
+          <div class="item-points">
+            <i class="fas fa-coins"></i> 900 points
+          </div>
+          <button onclick="sendSwapRequest('ITEM_ID_2')" class="interested-btn">
+            <i class="fas fa-exchange-alt"></i> Request Swap
+          </button>
+        </div>
+      </div>
+
+      <!-- Item 3 -->
+      <div class="item-card">
+        <div class="item-image-container">
+          <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1036&q=80" alt="Wool Sweater" class="item-image">
+          <span class="item-badge">Good</span>
+        </div>
+        <div class="item-content">
+          <h3 class="item-title">Cable-Knit Wool Sweater</h3>
+          <p class="item-description">Cozy and warm winter sweater with classic cable-knit pattern. Perfect for cold days.</p>
+          <div class="item-meta">
+            <span class="meta-item"><i class="fas fa-ruler"></i> Size S</span>
+            <span class="meta-item"><i class="fas fa-history"></i> 3 years</span>
+          </div>
+          <div class="item-points">
+            <i class="fas fa-coins"></i> 800 points
+          </div>
+          <button onclick="sendSwapRequest('ITEM_ID_3')" class="interested-btn">
+            <i class="fas fa-exchange-alt"></i> Request Swap
+          </button>
+        </div>
+      </div>
+
+      <!-- Item 4 -->
+      <div class="item-card">
+        <div class="item-image-container">
+          <img src="https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1035&q=80" alt="Summer Dress" class="item-image">
+          <span class="item-badge">New</span>
+        </div>
+        <div class="item-content">
+          <h3 class="item-title">Floral Summer Dress</h3>
+          <p class="item-description">Lightweight floral dress perfect for summer days. Flowy fabric with comfortable fit.</p>
+          <div class="item-meta">
+            <span class="meta-item"><i class="fas fa-ruler"></i> Size M</span>
+            <span class="meta-item"><i class="fas fa-history"></i> 6 months</span>
+          </div>
+          <div class="item-points">
+            <i class="fas fa-coins"></i> 1100 points
+          </div>
+          <button onclick="sendSwapRequest('ITEM_ID_4')" class="interested-btn">
+            <i class="fas fa-exchange-alt"></i> Request Swap
+          </button>
+        </div>
+      </div>
+
+      <!-- Item 5 -->
+      <div class="item-card">
+        <div class="item-image-container">
+          <img src="https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80" alt="Leather Bag" class="item-image">
+          <span class="item-badge">Excellent</span>
+        </div>
+        <div class="item-content">
+          <h3 class="item-title">Vegan Leather Tote</h3>
+          <p class="item-description">Stylish and spacious vegan leather tote bag. Perfect for everyday use or work.</p>
+          <div class="item-meta">
+            <span class="meta-item"><i class="fas fa-bag-shopping"></i> Accessory</span>
+            <span class="meta-item"><i class="fas fa-history"></i> 1 year</span>
+          </div>
+          <div class="item-points">
+            <i class="fas fa-coins"></i> 1500 points
+          </div>
+          <button onclick="sendSwapRequest('ITEM_ID_5')" class="interested-btn">
+            <i class="fas fa-exchange-alt"></i> Request Swap
+          </button>
+        </div>
+      </div>
+
+      <!-- Item 6 -->
+      <div class="item-card">
+        <div class="item-image-container">
+          <img src="https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80" alt="Formal Shirt" class="item-image">
+          <span class="item-badge">Like New</span>
+        </div>
+        <div class="item-content">
+          <h3 class="item-title">Linen Blend Shirt</h3>
+          <p class="item-description">Premium linen-cotton blend shirt for formal or casual occasions. Wrinkle-resistant.</p>
+          <div class="item-meta">
+            <span class="meta-item"><i class="fas fa-ruler"></i> Size L</span>
+            <span class="meta-item"><i class="fas fa-history"></i> 8 months</span>
+          </div>
+          <div class="item-points">
+            <i class="fas fa-coins"></i> 750 points
+          </div>
+          <button onclick="sendSwapRequest('ITEM_ID_6')" class="interested-btn">
+            <i class="fas fa-exchange-alt"></i> Request Swap
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <p class="footer-text">Join our community of sustainable fashion lovers</p>
+      <p class="footer-text">© 2024 ReWear. Making fashion circular.</p>
+      <div class="footer-links">
+        <a href="#" class="footer-link">About Us</a>
+        <a href="#" class="footer-link">How It Works</a>
+        <a href="#" class="footer-link">Sustainability Impact</a>
+        <a href="#" class="footer-link">Contact</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function sendSwapRequest(itemId) {
+      const token = localStorage.getItem("userToken");
+
+      if (!token) {
+        alert("Please log in to send a swap request.");
+        window.location.href = "login.html";
+        return;
+      }
+
+      // Create a visual feedback element
+      const button = event.currentTarget;
+      const originalText = button.innerHTML;
+      
+      // Change button to loading state
+      button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending Request';
+      button.disabled = true;
+      
+      // Simulate API request with timeout
+      setTimeout(() => {
+        // In a real app, you would use fetch as in your original code
+        // For this demo, we'll simulate a successful response
+        const success = Math.random() > 0.2; // 80% success rate for demo
+        
+        if (success) {
+          button.innerHTML = '<i class="fas fa-check"></i> Request Sent!';
+          button.style.background = 'linear-gradient(135deg, #2E8B57, #1e5a3a)';
+          
+          // Show success notification
+          showNotification('✅ Swap request sent to owner!');
+        } else {
+          button.innerHTML = originalText;
+          button.disabled = false;
+          
+          // Show error notification
+          showNotification('⚠️ Failed to send request. Please try again.');
+        }
+      }, 1500);
+    }
+    
+    function showNotification(message) {
+      // Create notification element
+      const notification = document.createElement('div');
+      notification.textContent = message;
+      notification.style.position = 'fixed';
+      notification.style.bottom = '20px';
+      notification.style.right = '20px';
+      notification.style.padding = '15px 25px';
+      notification.style.background = 'linear-gradient(135deg, var(--primary-green), var(--dark-green))';
+      notification.style.color = 'white';
+      notification.style.borderRadius = '12px';
+      notification.style.boxShadow = '0 5px 15px rgba(0,0,0,0.2)';
+      notification.style.zIndex = '1000';
+      notification.style.opacity = '0';
+      notification.style.transform = 'translateY(20px)';
+      notification.style.transition = 'all 0.3s ease';
+      
+      document.body.appendChild(notification);
+      
+      // Animate in
+      setTimeout(() => {
+        notification.style.opacity = '1';
+        notification.style.transform = 'translateY(0)';
+      }, 10);
+      
+      // Remove after delay
+      setTimeout(() => {
+        notification.style.opacity = '0';
+        notification.style.transform = 'translateY(20px)';
+        setTimeout(() => {
+          document.body.removeChild(notification);
+        }, 300);
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
