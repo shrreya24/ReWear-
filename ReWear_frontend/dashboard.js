@@ -979,7 +979,7 @@ updateStatsUI() {
                     <h3>Edit Listing</h3>
                     <button class="modal-close" onclick="dashboard.closeEditListingModal()">
                         <i class="fas fa-times"></i>
-                        // Continuing from the edit listing modal creation...
+                        
 
                     </button>
                 </div>
