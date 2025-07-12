@@ -461,66 +461,76 @@ class ReWearDashboard {
 
     // Update user UI elements
     updateUserUI() {
-        if (!this.currentUser) return;
+    if (!this.currentUser) return;
 
-        // Update header
-        const userName = document.getElementById('user-name');
-        const userPoints = document.getElementById('user-points');
-        const userAvatar = document.getElementById('user-avatar');
+    // Update header
+    const userName = document.getElementById('user-name');
+    const userPoints = document.getElementById('user-points');
+    const userAvatar = document.getElementById('user-avatar');
 
-        if (userName) userName.textContent = this.currentUser.name;
-        if (userPoints) userPoints.textContent = this.currentUser.points;
-        if (userAvatar) userAvatar.src = this.currentUser.avatar;
+    if (userName) userName.textContent = this.currentUser.name;
+    if (userPoints) userPoints.textContent = this.currentUser.points;
+    if (userAvatar) userAvatar.src = this.currentUser.avatar;
 
-        // Update profile section
-        const profileName = document.getElementById('profile-name');
-        const profileEmail = document.getElementById('profile-email');
-        const profileJoined = document.getElementById('profile-joined');
-        const profilePoints = document.getElementById('profile-points');
-        const profileRating = document.getElementById('profile-rating');
-        const profileAvatar = document.getElementById('profile-avatar');
+    // Update profile section
+    const profileName = document.getElementById('profile-name');
+    const profileEmail = document.getElementById('profile-email');
+    const profileJoined = document.getElementById('profile-joined');
+    const profilePoints = document.getElementById('profile-points');
+    const profileRating = document.getElementById('profile-rating');
+    const profileAvatar = document.getElementById('profile-avatar');
 
-        if (profileName) profileName.textContent = this.currentUser.name;
-        if (profileEmail) profileEmail.textContent = this.currentUser.email;
-        if (profileJoined) profileJoined.textContent = new Date(this.currentUser.joinedDate).toLocaleDateString();
-        if (profilePoints) profilePoints.textContent = this.currentUser.points;
-        if (profileRating) profileRating.textContent = this.currentUser.rating;
-        if (profileAvatar) profileAvatar.src = this.currentUser.avatar;
+    if (profileName) profileName.textContent = this.currentUser.name;
+    if (profileEmail) profileEmail.textContent = this.currentUser.email;
+    if (profileJoined) profileJoined.textContent = new Date(this.currentUser.joinedDate).toLocaleDateString();
+    if (profilePoints) profilePoints.textContent = this.currentUser.points;
+    if (profileRating) profileRating.textContent = this.currentUser.rating;
+    if (profileAvatar) profileAvatar.src = this.currentUser.avatar;
 
-        // Update stats
-        const totalListings = document.getElementById('total-listings');
-        const totalSwaps = document.getElementById('total-swaps');
-        const totalPoints = document.getElementById('total-points');
+    // Update stats - FIXED VERSION
+    this.updateStatsUI();
+}
+updateStatsUI() {
+    const totalListings = document.getElementById('total-listings');
+    const totalSwaps = document.getElementById('total-swaps');
+    const totalPoints = document.getElementById('total-points');
 
-        if (totalListings) totalListings.textContent = this.userListings.length;
-        if (totalSwaps) totalSwaps.textContent = this.userPurchases.filter(p => p.type === 'swap').length;
-        if (totalPoints) totalPoints.textContent = this.currentUser.points;
-    }
+    // Calculate stats based on current data
+    const listingsCount = this.userListings ? this.userListings.length : 0;
+    const swapsCount = this.userPurchases ? this.userPurchases.filter(p => p.type === 'swap').length : 0;
+    const pointsCount = this.currentUser ? this.currentUser.points : 0;
 
-    // Update listings UI
+    if (totalListings) totalListings.textContent = listingsCount;
+    if (totalSwaps) totalSwaps.textContent = swapsCount;
+    if (totalPoints) totalPoints.textContent = pointsCount;
+}
+
     updateListingsUI() {
-        const listingsGrid = document.getElementById('listings-grid');
-        if (!listingsGrid) return;
+    const listingsGrid = document.getElementById('listings-grid');
+    if (!listingsGrid) return;
 
-        // Clear loading placeholder
-        listingsGrid.innerHTML = '';
+    // Clear loading placeholder
+    listingsGrid.innerHTML = '';
 
-        if (this.userListings.length === 0) {
-            listingsGrid.innerHTML = `
-                <div class="loading-placeholder">
-                    <i class="fas fa-tshirt"></i>
-                    <p>No listings yet. Start by adding your first item!</p>
-                </div>
-            `;
-            return;
-        }
-
-        // Create listing cards
-        this.userListings.forEach(listing => {
-            const listingCard = this.createListingCard(listing);
-            listingsGrid.appendChild(listingCard);
-        });
+    if (this.userListings.length === 0) {
+        listingsGrid.innerHTML = `
+            <div class="loading-placeholder">
+                <i class="fas fa-tshirt"></i>
+                <p>No listings yet. Start by adding your first item!</p>
+            </div>
+        `;
+        return;
     }
+
+    // Create listing cards
+    this.userListings.forEach(listing => {
+        const listingCard = this.createListingCard(listing);
+        listingsGrid.appendChild(listingCard);
+    });
+
+    // UPDATE STATS AFTER LISTINGS ARE LOADED
+    this.updateStatsUI();
+}
 
     // Create listing card element
     createListingCard(listing) {
@@ -551,28 +561,31 @@ class ReWearDashboard {
 
     // Update purchases UI
     updatePurchasesUI() {
-        const purchasesList = document.getElementById('purchases-list');
-        if (!purchasesList) return;
+    const purchasesList = document.getElementById('purchases-list');
+    if (!purchasesList) return;
 
-        // Clear loading placeholder
-        purchasesList.innerHTML = '';
+    // Clear loading placeholder
+    purchasesList.innerHTML = '';
 
-        if (this.userPurchases.length === 0) {
-            purchasesList.innerHTML = `
-                <div class="loading-placeholder">
-                    <i class="fas fa-shopping-bag"></i>
-                    <p>No purchases yet. Start browsing items to swap or buy!</p>
-                </div>
-            `;
-            return;
+    if (this.userPurchases.length === 0) {
+        purchasesList.innerHTML = `
+            <div class="loading-placeholder">
+                <i class="fas fa-shopping-bag"></i>
+                <p>No purchases yet. Start browsing items to swap or buy!</p>
+            </div>
+        `;
+        return;
         }
 
         // Create purchase items
         this.userPurchases.forEach(purchase => {
-            const purchaseItem = this.createPurchaseItem(purchase);
-            purchasesList.appendChild(purchaseItem);
-        });
-    }
+        const purchaseItem = this.createPurchaseItem(purchase);
+        purchasesList.appendChild(purchaseItem);
+    });
+
+    // UPDATE STATS AFTER PURCHASES ARE LOADED
+    this.updateStatsUI();
+}
 
     // Create purchase item element
     createPurchaseItem(purchase) {
@@ -780,45 +793,45 @@ class ReWearDashboard {
 
     // Handle add item form submission via API
     async handleAddItem(e) {
-        e.preventDefault();
-        
-        const formData = new FormData(e.target);
-        const newItemData = {
-            title: formData.get('title'),
-            description: formData.get('description'),
-            category: formData.get('category'),
-            size: formData.get('size'),
-            condition: formData.get('condition'),
-            image: formData.get('image') || 'https://via.placeholder.com/300x200/4CAF50/FFFFFF?text=New+Item',
-            status: 'active'
-        };
+    e.preventDefault();
+    
+    const formData = new FormData(e.target);
+    const newItemData = {
+        title: formData.get('title'),
+        description: formData.get('description'),
+        category: formData.get('category'),
+        size: formData.get('size'),
+        condition: formData.get('condition'),
+        image: formData.get('image') || 'https://via.placeholder.com/300x200/4CAF50/FFFFFF?text=New+Item',
+        status: 'active'
+    };
 
-        try {
-            this.showLoading();
-            
-            // Create listing via API
-            const newListing = await this.api.createListing(newItemData);
-            
-            // Update local data
-            this.userListings.unshift(newListing);
-            
-            // Update UI
-            this.updateListingsUI();
-            this.updateUserUI();
-            
-            // Close modal
-            this.closeAddItemModal();
-            
-            // Show success message
-            this.showNotification('Item added successfully!', 'success');
-            
-        } catch (error) {
-            console.error('Error adding item:', error);
-            this.showError('Failed to add item');
-        } finally {
-            this.hideLoading();
-        }
+    try {
+        this.showLoading();
+        
+        // Create listing via API
+        const newListing = await this.api.createListing(newItemData);
+        
+        // Update local data
+        this.userListings.unshift(newListing);
+        
+        // Update UI
+        this.updateListingsUI();
+        this.updateStatsUI(); // EXPLICITLY UPDATE STATS
+        
+        // Close modal
+        this.closeAddItemModal();
+        
+        // Show success message
+        this.showNotification('Item added successfully!', 'success');
+        
+    } catch (error) {
+        console.error('Error adding item:', error);
+        this.showError('Failed to add item');
+    } finally {
+        this.hideLoading();
     }
+}
 
     // Edit listing via API
     async editListing(listingId) {
@@ -1016,39 +1029,39 @@ class ReWearDashboard {
 
     // Delete listing via API
     async deleteListing() {
-        const modal = document.getElementById('edit-listing-modal');
-        const listingId = parseInt(modal.dataset.listingId);
-        
-        if (!confirm('Are you sure you want to delete this listing? This action cannot be undone.')) {
-            return;
-        }
-
-        try {
-            this.showLoading();
-            
-            // Delete listing via API
-            await this.api.deleteListing(listingId);
-            
-            // Remove from local data
-            this.userListings = this.userListings.filter(l => l.id !== listingId);
-            
-            // Update UI
-            this.updateListingsUI();
-            this.updateUserUI();
-            
-            // Close modal
-            this.closeEditListingModal();
-            
-            // Show success message
-            this.showNotification('Listing deleted successfully!', 'success');
-            
-        } catch (error) {
-            console.error('Error deleting listing:', error);
-            this.showError('Failed to delete listing');
-        } finally {
-            this.hideLoading();
-        }
+    const modal = document.getElementById('edit-listing-modal');
+    const listingId = parseInt(modal.dataset.listingId);
+    
+    if (!confirm('Are you sure you want to delete this listing? This action cannot be undone.')) {
+        return;
     }
+
+    try {
+        this.showLoading();
+        
+        // Delete listing via API
+        await this.api.deleteListing(listingId);
+        
+        // Remove from local data
+        this.userListings = this.userListings.filter(l => l.id !== listingId);
+        
+        // Update UI
+        this.updateListingsUI();
+        this.updateStatsUI(); // EXPLICITLY UPDATE STATS
+        
+        // Close modal
+        this.closeEditListingModal();
+        
+        // Show success message
+        this.showNotification('Listing deleted successfully!', 'success');
+        
+    } catch (error) {
+        console.error('Error deleting listing:', error);
+        this.showError('Failed to delete listing');
+    } finally {
+        this.hideLoading();
+    }
+}
 
     // View listing details
     viewListing(listingId) {
