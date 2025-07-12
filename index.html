@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ReWear - Sustainable Fashion Marketplace</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-green: #4CAF50;
+      --dark-green: #2E8B57;
+      --cream: #F5F5F0;
+      --beige: #D9CBA3;
+      --clay: #D87D4A;
+      --charcoal: #333333;
+      --white: #ffffff;
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      --nav-height: 80px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--cream);
+      color: var(--charcoal);
+      overflow-x: hidden;
+    }
+
+    /* ===== Premium Navbar ===== */
+    .navbar {
+      height: var(--nav-height);
+      background-color: var(--cream);
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 5%;
+      transition: all 0.4s ease;
+    }
+
+    .navbar.scrolled {
+      height: 70px;
+      background-color: rgba(245, 245, 240, 0.98);
+      backdrop-filter: blur(5px);
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-img {
+      height: 40px;
+      transition: var(--transition);
+    }
+
+    .logo-text {
+      font-size: 24px;
+      font-weight: 700;
+      background: linear-gradient(to right, var(--primary-green), var(--dark-green));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 25px;
+      margin-right: auto;
+      margin-left: 50px;
+    }
+
+    .nav-links a {
+      color: var(--charcoal);
+      text-decoration: none;
+      font-weight: 500;
+      position: relative;
+      padding: 10px 0;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 15px;
+    }
+
+    .nav-links a i {
+      font-size: 14px;
+      width: 20px;
+      text-align: center;
+    }
+
+    .nav-links a:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 3px;
+      background: linear-gradient(to right, var(--primary-green), var(--dark-green));
+      transition: var(--transition);
+    }
+
+    .nav-links a:hover:after {
+      width: 100%;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary-green);
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .nav-btn {
+      padding: 10px 20px;
+      border-radius: 30px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 15px;
+    }
+
+    .login-btn {
+      background: transparent;
+      border: 2px solid var(--primary-green);
+      color: var(--primary-green);
+    }
+
+    .login-btn:hover {
+      background-color: rgba(76, 175, 80, 0.1);
+    }
+
+    .signup-btn {
+      background: linear-gradient(to right, var(--primary-green), var(--dark-green));
+      color: var(--white);
+      border: none;
+      box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+    }
+
+    .signup-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+    }
+
+    .hamburger {
+      display: none;
+      cursor: pointer;
+      font-size: 24px;
+    }
+
+    /* ===== Hero Slider ===== */
+    .hero-slider {
+      height: 100vh;
+      margin-top: var(--nav-height);
+      position: relative;
+    }
+
+    .swiper {
+      width: 100%;
+      height: 100%;
+    }
+
+    .swiper-slide {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .slide-bg {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+      transition: transform 8s ease-out;
+    }
+
+    .swiper-slide-active .slide-bg {
+      transform: scale(1.05);
+    }
+
+    .slide-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 0;
+    }
+
+    .slide-content {
+      max-width: 1200px;
+      padding: 0 5%;
+      color: var(--white);
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      transform: translateY(50px);
+      opacity: 0;
+      transition: all 0.8s ease;
+    }
+
+    .swiper-slide-active .slide-content {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .slide-content h1 {
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-weight: 700;
+      margin-bottom: 20px;
+      line-height: 1.2;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .slide-content p {
+      font-size: clamp(1rem, 2vw, 1.3rem);
+      max-width: 700px;
+      margin: 0 auto 40px;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    .hero-btn {
+      display: inline-block;
+      padding: 15px 35px;
+      background: linear-gradient(to right, var(--primary-green), var(--dark-green));
+      color: var(--white);
+      border-radius: 50px;
+      font-weight: 600;
+      text-decoration: none;
+      box-shadow: 0 4px 20px rgba(76, 175, 80, 0.4);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-btn:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 30px rgba(76, 175, 80, 0.6);
+    }
+
+    .hero-btn:after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: 0.5s;
+    }
+
+    .hero-btn:hover:after {
+      left: 100%;
+    }
+
+    .swiper-pagination-bullet {
+      width: 12px;
+      height: 12px;
+      background: rgba(255, 255, 255, 0.5);
+      opacity: 1;
+      transition: var(--transition);
+    }
+
+    .swiper-pagination-bullet-active {
+      background: var(--white);
+      transform: scale(1.3);
+    }
+
+    .swiper-button-next,
+    .swiper-button-prev {
+      color: var(--white);
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(5px);
+      transition: var(--transition);
+    }
+
+    .swiper-button-next:hover,
+    .swiper-button-prev:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(1.1);
+    }
+
+    /* ===== Features Section ===== */
+    .features-section {
+      padding: 100px 5%;
+      background-color: var(--white);
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .section-title h2 {
+      font-size: 2.5rem;
+      color: var(--charcoal);
+      margin-bottom: 15px;
+      position: relative;
+      display: inline-block;
+    }
+
+    .section-title h2:after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(to right, var(--primary-green), var(--dark-green));
+      border-radius: 2px;
+    }
+
+    .section-title p {
+      color: #666;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .feature-card {
+      background-color: var(--cream);
+      border-radius: 15px;
+      padding: 40px 30px;
+      text-align: center;
+      transition: var(--transition);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .feature-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(to right, var(--primary-green), var(--dark-green));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 25px;
+      color: var(--white);
+      font-size: 30px;
+      box-shadow: 0 10px 20px rgba(76, 175, 80, 0.3);
+    }
+
+    .feature-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      color: var(--charcoal);
+    }
+
+    .feature-card p {
+      color: #666;
+      line-height: 1.6;
+    }
+
+    /* ===== Featured Items ===== */
+    .featured-section {
+      padding: 100px 5%;
+      background-color: var(--cream);
+    }
+
+    .items-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .item-card {
+      background-color: var(--white);
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .item-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .item-img {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .item-card:hover .item-img {
+      transform: scale(1.05);
+    }
+
+    .item-info {
+      padding: 20px;
+      position: relative;
+    }
+
+    .item-info h3 {
+      margin-bottom: 10px;
+      color: var(--charcoal);
+    }
+
+    .item-price {
+      color: var(--primary-green);
+      font-weight: 600;
+      font-size: 1.2rem;
+    }
+
+    .item-badge {
+      position: absolute;
+      top: -20px;
+      right: 20px;
+      background: linear-gradient(to right, var(--primary-green), var(--dark-green));
+      color: var(--white);
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+    }
+
+    /* ===== Testimonials ===== */
+    .testimonials-section {
+      padding: 100px 5%;
+      background-color: var(--white);
+    }
+
+    .testimonials-slider {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .testimonial-card {
+      background-color: var(--cream);
+      border-radius: 15px;
+      padding: 40px;
+      box-shadow: var(--shadow);
+      margin: 20px;
+      position: relative;
+    }
+
+    .testimonial-card:before {
+      content: '"';
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      font-size: 5rem;
+      color: var(--primary-green);
+      opacity: 0.1;
+      font-family: Georgia, serif;
+      line-height: 1;
+    }
+
+    .testimonial-content {
+      font-size: 1.1rem;
+      color: var(--charcoal);
+      line-height: 1.8;
+      margin-bottom: 30px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .author-avatar {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      overflow: hidden;
+    }
+
+    .author-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .author-info h4 {
+      color: var(--charcoal);
+      font-size: 1.2rem;
+      margin-bottom: 5px;
+    }
+
+    .author-info p {
+      color: var(--primary-green);
+      font-weight: 500;
+    }
+
+    .testimonials-slider .swiper-pagination {
+      position: relative;
+      margin-top: 40px;
+    }
+
+    /* ===== Stats Section ===== */
+    .stats-section {
+      padding: 80px 5%;
+      background: linear-gradient(135deg, var(--primary-green) 0%, var(--dark-green) 100%);
+      color: var(--white);
+      text-align: center;
+    }
+
+    .stats-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .stat-item {
+      flex: 1;
+      min-width: 200px;
+      padding: 30px;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s ease;
+    }
+
+    .stat-item.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .stat-value {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: var(--white);
+    }
+
+    .stat-label {
+      font-size: 1.2rem;
+      font-weight: 500;
+    }
+
+    /* ===== CTA Section ===== */
+    .cta-section {
+      padding: 100px 5%;
+      background-color: var(--cream);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 60px;
+      background-color: var(--white);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta-container:before {
+      content: '';
+      position: absolute;
+      top: -50px;
+      right: -50px;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: var(--primary-green);
+      opacity: 0.1;
+      z-index: -1;
+    }
+
+    .cta-container h2 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      color: var(--charcoal);
+    }
+
+    .cta-container p {
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 1.1rem;
+    }
+
+    .cta-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .cta-btn {
+      padding: 15px 35px;
+      border-radius: 50px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .primary-btn {
+      background: linear-gradient(to right, var(--primary-green), var(--dark-green));
+      color: var(--white);
+      box-shadow: 0 4px 20px rgba(76, 175, 80, 0.4);
+    }
+
+    .primary-btn:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 30px rgba(76, 175, 80, 0.6);
+    }
+
+    .secondary-btn {
+      border: 2px solid var(--primary-green);
+      color: var(--primary-green);
+    }
+
+    .secondary-btn:hover {
+      background-color: rgba(76, 175, 80, 0.1);
+      transform: translateY(-5px);
+    }
+
+    /* ===== Footer ===== */
+    .footer {
+      background-color: var(--charcoal);
+      color: var(--white);
+      padding: 80px 5% 30px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 40px;
+      max-width: 1200px;
+      margin: 0 auto 50px;
+    }
+
+    .footer-brand {
+      margin-bottom: 20px;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .footer-logo img {
+      height: 40px;
+    }
+
+    .footer-logo span {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    .footer-about p {
+      color: #aaa;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 15px;
+    }
+
+    .social-link {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+
+    .social-link:hover {
+      background-color: var(--primary-green);
+      transform: translateY(-3px);
+    }
+
+    .footer-links h3 {
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+      position: relative;
+      padding-bottom: 10px;
+    }
+
+    .footer-links h3:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 40px;
+      height: 3px;
+      background: var(--primary-green);
+    }
+
+    .footer-links ul {
+      list-style: none;
+    }
+
+    .footer-links li {
+      margin-bottom: 12px;
+    }
+
+    .footer-links a {
+      color: #aaa;
+      text-decoration: none;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .footer-links a:hover {
+      color: var(--white);
+      padding-left: 5px;
+    }
+
+    .footer-links a i {
+      color: var(--primary-green);
+      font-size: 14px;
+    }
+
+    .footer-newsletter p {
+      color: #aaa;
+      margin-bottom: 20px;
+    }
+
+    .newsletter-form {
+      display: flex;
+      gap: 10px;
+    }
+
+    .newsletter-input {
+      flex: 1;
+      padding: 12px 15px;
+      border-radius: 5px;
+      border: none;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: var(--white);
+    }
+
+    .newsletter-input::placeholder {
+      color: #ccc;
+    }
+
+    .newsletter-btn {
+      background: var(--primary-green);
+      color: var(--white);
+      border: none;
+      padding: 0 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .newsletter-btn:hover {
+      background: var(--dark-green);
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding-top: 30px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      color: #aaa;
+      font-size: 0.9rem;
+    }
+
+    /* ===== Responsive Design ===== */
+    @media (max-width: 992px) {
+      .nav-links {
+        gap: 15px;
+        margin-left: 30px;
+      }
+      
+      .nav-btn {
+        padding: 8px 15px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 0 20px;
+      }
+      
+      .nav-links {
+        position: fixed;
+        top: var(--nav-height);
+        left: -100%;
+        width: 80%;
+        height: calc(100vh - var(--nav-height));
+        background-color: var(--cream);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 30px;
+        transition: var(--transition);
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        margin: 0;
+      }
+      
+      .nav-links.active {
+        left: 0;
+      }
+      
+      .hamburger {
+        display: block;
+      }
+      
+      .hero-slider {
+        height: 80vh;
+      }
+      
+      .slide-content h1 {
+        font-size: 2.5rem;
+      }
+      
+      .cta-container {
+        padding: 40px 20px;
+      }
+      
+      .cta-buttons {
+        flex-direction: column;
+        gap: 15px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .logo-text {
+        font-size: 20px;
+      }
+      
+      .hero-slider {
+        height: 70vh;
+      }
+      
+      .slide-content h1 {
+        font-size: 2rem;
+      }
+      
+      .items-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .testimonial-card {
+        padding: 30px 20px;
+      }
+      
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .newsletter-form {
+        flex-direction: column;
+      }
+      
+      .newsletter-btn {
+        padding: 12px;
+      }
+    }
+
+    /* ===== Animations ===== */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate {
+      animation: fadeInUp 1s ease forwards;
+    }
+
+    .delay-1 {
+      animation-delay: 0.2s;
+    }
+
+    .delay-2 {
+      animation-delay: 0.4s;
+    }
+
+    .delay-3 {
+      animation-delay: 0.6s;
+    }
+  </style>
+</head>
+<body>
+  <!-- Premium Navbar -->
+  <nav class="navbar">
+    <div class="logo-container">
+      <img src="images/logo.png" alt="ReWear Logo" class="logo-img">
+      <span class="logo-text">ReWear</span>
+    </div>
+    
+    <ul class="nav-links">
+      <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="#"><i class="fas fa-shopping-bag"></i> Buy Items</a></li>
+      <li><a href="#"><i class="fas fa-tag"></i> Sell Items</a></li>
+      <li><a href="#"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+      <li><a href="#"><i class="fas fa-users"></i> Community</a></li>
+    </ul>
+    
+    <div class="nav-actions">
+      <button class="nav-btn login-btn"><i class="fas fa-sign-in-alt"></i> Login</button>
+      <button class="nav-btn signup-btn"><i class="fas fa-user-plus"></i> Sign Up</button>
+    </div>
+    
+    <div class="hamburger">
+      <i class="fas fa-bars"></i>
+    </div>
+  </nav>
+
+  <!-- Hero Slider with Dynamic Backgrounds -->
+  <section class="hero-slider">
+    <div class="swiper">
+      <div class="swiper-wrapper">
+        <!-- Slide 1 -->
+        <div class="swiper-slide">
+          <img src="images/hero1.jpg" alt="Sustainable Fashion" class="slide-bg">
+          <div class="slide-overlay"></div>
+          <div class="slide-content">
+            <h1 class="animate">Give Clothes a Second Life</h1>
+            <p class="animate delay-1">Join thousands of eco-conscious swappers reducing textile waste</p>
+            <a href="signup.html" class="hero-btn animate delay-2">Start Swapping</a>
+          </div>
+        </div>
+        
+        <!-- Slide 2 -->
+        <div class="swiper-slide">
+          <img src="images/hero2.jpg" alt="Fashion Community" class="slide-bg">
+          <div class="slide-overlay"></div>
+          <div class="slide-content">
+            <h1 class="animate">Discover Unique Styles</h1>
+            <p class="animate delay-1">Find pre-loved fashion gems from our global community</p>
+            <a href="signup.html" class="hero-btn animate delay-2">Browse Items</a>
+          </div>
+        </div>
+        
+        <!-- Slide 3 -->
+        <div class="swiper-slide">
+          <img src="images/hero3.jpg" alt="Earn Points" class="slide-bg">
+          <div class="slide-overlay"></div>
+          <div class="slide-content">
+            <h1 class="animate">Earn While You Swap</h1>
+            <p class="animate delay-1">Redeem points for exclusive items or donate to eco causes</p>
+            <a href="signup.html" class="hero-btn animate delay-2">Learn How</a>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Slider Controls -->
+      <div class="swiper-pagination"></div>
+      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features-section">
+    <div class="section-title">
+      <h2>Why Choose ReWear?</h2>
+      <p>Experience the future of sustainable fashion</p>
+    </div>
+    
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-leaf"></i>
+        </div>
+        <h3>Eco-Friendly</h3>
+        <p>Reduce textile waste and lower your carbon footprint with every swap</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-coins"></i>
+        </div>
+        <h3>Cost Effective</h3>
+        <p>Refresh your wardrobe without spending money on new clothes</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-award"></i>
+        </div>
+        <h3>Rewarding</h3>
+        <p>Earn points for every swap that you can redeem or donate</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-globe"></i>
+        </div>
+        <h3>Global Community</h3>
+        <p>Connect with fashion lovers who care about the planet</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Items -->
+  <section class="featured-section">
+    <div class="section-title">
+      <h2>Trending This Week</h2>
+      <p>Discover the most sought-after items in our community</p>
+    </div>
+    
+    <div class="items-grid">
+      <div class="item-card">
+        <img src="images/item1.jpg" alt="Vintage Denim Jacket" class="item-img">
+        <div class="item-info">
+          <span class="item-badge">Popular</span>
+          <h3>Vintage Denim Jacket</h3>
+          <p class="item-price">1200 points</p>
+        </div>
+      </div>
+      
+      <div class="item-card">
+        <img src="images/item2.jpg" alt="Floral Summer Dress" class="item-img">
+        <div class="item-info">
+          <h3>Floral Summer Dress</h3>
+          <p class="item-price">800 points</p>
+        </div>
+      </div>
+      
+      <div class="item-card">
+        <img src="images/item3.jpg" alt="Eco Tote Bag" class="item-img">
+        <div class="item-info">
+          <span class="item-badge">New</span>
+          <h3>Eco Tote Bag</h3>
+          <p class="item-price">500 points</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="testimonials-section">
+    <div class="section-title">
+      <h2>What Our Community Says</h2>
+      <p>Hear from swappers who transformed their wardrobes sustainably</p>
+    </div>
+    
+    <div class="testimonials-slider">
+      <div class="swiper">
+        <div class="swiper-wrapper">
+          <!-- Testimonial 1 -->
+          <div class="swiper-slide">
+            <div class="testimonial-card">
+              <div class="testimonial-content">
+                "I've completely transformed my wardrobe without buying anything new! ReWear helped me discover my personal style while being eco-conscious. The points system is genius - I've donated mine to ocean cleanup initiatives."
+              </div>
+              <div class="testimonial-author">
+                <div class="author-avatar">
+                  <img src="images/testimonial1.jpg" alt="Sarah J.">
+                </div>
+                <div class="author-info">
+                  <h4>Sarah J.</h4>
+                  <p>Member since 2022</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Testimonial 2 -->
+          <div class="swiper-slide">
+            <div class="testimonial-card">
+              <div class="testimonial-content">
+                "As a college student, ReWear has been a game-changer. I refresh my wardrobe every season without spending money. The community is amazing - I've made friends who share my passion for sustainable fashion."
+              </div>
+              <div class="testimonial-author">
+                <div class="author-avatar">
+                  <img src="images/testimonial2.jpg" alt="Alex M.">
+                </div>
+                <div class="author-info">
+                  <h4>Alex M.</h4>
+                  <p>Student Member</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Testimonial 3 -->
+          <div class="swiper-slide">
+            <div class="testimonial-card">
+              <div class="testimonial-content">
+                "I run a small boutique and use ReWear to source unique vintage pieces. The quality of items is outstanding, and I love that I'm supporting circular fashion. My customers can't believe these are second-hand finds!"
+              </div>
+              <div class="testimonial-author">
+                <div class="author-avatar">
+                  <img src="images/testimonial3.jpg" alt="Priya K.">
+                </div>
+                <div class="author-info">
+                  <h4>Priya K.</h4>
+                  <p>Boutique Owner</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Testimonial Controls -->
+        <div class="swiper-pagination"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="stats-section">
+    <div class="stats-container">
+      <div class="stat-item">
+        <div class="stat-value">25K+</div>
+        <div class="stat-label">Happy Swappers</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">50K+</div>
+        <div class="stat-label">Items Swapped</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">12 Tons</div>
+        <div class="stat-label">Clothing Saved</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">$500K+</div>
+        <div class="stat-label">Community Savings</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section">
+    <div class="cta-container">
+      <h2>Ready to Join the Fashion Revolution?</h2>
+      <p>Sign up today and get 500 bonus points to start your sustainable fashion journey.</p>
+      <div class="cta-buttons">
+        <a href="signup.html" class="cta-btn primary-btn"><i class="fas fa-user-plus"></i> Sign Up Free</a>
+        <a href="#" class="cta-btn secondary-btn"><i class="fas fa-play-circle"></i> How It Works</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Premium Footer -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-about">
+        <div class="footer-logo">
+          <img src="images/logo.png" alt="ReWear Logo">
+          <span>ReWear</span>
+        </div>
+        <p>We're on a mission to make fashion sustainable by creating a global community of clothes swappers.</p>
+        <div class="social-links">
+          <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-pinterest"></i></a>
+        </div>
+      </div>
+      
+      <div class="footer-links">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="#"><i class="fas fa-chevron-right"></i> Home</a></li>
+          <li><a href="#"><i class="fas fa-chevron-right"></i> Buy Items</a></li>
+          <li><a href="#"><i class="fas fa-chevron-right"></i> Sell Items</a></li>
+          <li><a href="#"><i class="fas fa-chevron-right"></i> Dashboard</a></li>
+          <li><a href="#"><i class="fas fa-chevron-right"></i> Community</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-links">
+        <h3>Support</h3>
+        <ul>
+          <li><a href="#"><i class="fas fa-chevron-right"></i> FAQs</a></li>
+          <li><a href="#"><i class="fas fa-chevron-right"></i> Shipping</a></li>
+          <li><a href="#"><i class="fas fa-chevron-right"></i> Returns</a></li>
+          <li><a href="#"><i class="fas fa-chevron-right"></i> Safety Tips</a></li>
+          <li><a href="#"><i class="fas fa-chevron-right"></i> Contact Us</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-newsletter">
+        <h3>Newsletter</h3>
+        <p>Subscribe for sustainable fashion tips and exclusive swap opportunities.</p>
+        <form class="newsletter-form">
+          <input type="email" placeholder="Your email" class="newsletter-input" required>
+          <button type="submit" class="newsletter-btn"><i class="fas fa-paper-plane"></i></button>
+        </form>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <p>&copy; 2024 ReWear. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+  <script>
+    // Initialize Hero Slider
+    const heroSwiper = new Swiper('.hero-slider .swiper', {
+      loop: true,
+      autoplay: {
+        delay: 7000,
+        disableOnInteraction: false,
+      },
+      effect: 'fade',
+      fadeEffect: {
+        crossFade: true
+      },
+      pagination: {
+        el: '.hero-slider .swiper-pagination',
+        clickable: true,
+      },
+      navigation: {
+        nextEl: '.hero-slider .swiper-button-next',
+        prevEl: '.hero-slider .swiper-button-prev',
+      },
+    });
+
+    // Initialize Testimonials Slider
+    const testimonialSwiper = new Swiper('.testimonials-slider .swiper', {
+      loop: true,
+      autoplay: {
+        delay: 5000,
+      },
+      pagination: {
+        el: '.testimonials-slider .swiper-pagination',
+        clickable: true,
+      },
+    });
+
+    // Mobile Menu Toggle
+    const hamburger = document.querySelector('.hamburger');
+    const navLinks = document.querySelector('.nav-links');
+    
+    hamburger.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+      hamburger.innerHTML = navLinks.classList.contains('active') ? 
+        '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+    });
+
+    // Navbar Scroll Effect
+    window.addEventListener('scroll', () => {
+      const navbar = document.querySelector('.navbar');
+      navbar.classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // Animate Stats on Scroll
+    const statsObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('.stat-item').forEach(item => {
+      statsObserver.observe(item);
+    });
+
+    // Smooth Scrolling for Anchor Links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+  </script>
+</body>
+</html>
