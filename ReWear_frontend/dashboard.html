@@ -4,30 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ReWear - Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="dashboard.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
+    <!-- Notification System -->
+    <div class="notification" id="notification">
+        <span id="notification-message">Action completed successfully!</span>
+    </div>
+
     <!-- Header -->
     <header class="header">
         <div class="container">
             <div class="header-content">
-                <div class="logo">
+                <a href="index.html" class="logo">
                     <i class="fas fa-recycle"></i>
                     <span>ReWear</span>
-                </div>
+                </a>
                 <nav class="nav">
-                    <a href="#" class="nav-link">Browse Items</a>
-                    <a href="#" class="nav-link">Add Item</a>
+                    <a href="index.html" class="nav-link">Browse Items</a>
+                    <a href="#" class="nav-link" id="nav-add-item">Add Item</a>
                     <a href="#" class="nav-link active">Dashboard</a>
                 </nav>
                 <div class="user-menu">
                     <div class="points-badge">
                         <i class="fas fa-coins"></i>
-                        <span id="user-points">0</span> Points
+                        <span id="user-points">1,250</span> Points
                     </div>
                     <div class="user-avatar">
-                        <img src="https://via.placeholder.com/40x40/4CAF50/FFFFFF?text=U" alt="User Avatar" id="user-avatar">
+                        <img src="https://gravatar.com/avatar/cc7a085c1972b02612cfc4f0dfabb6ca?s=400&d=robohash&r=x" alt="User Avatar" id="user-avatar">
                     </div>
                 </div>
             </div>
@@ -40,7 +45,7 @@
             <!-- Dashboard Header -->
             <section class="dashboard-header">
                 <div class="welcome-section">
-                    <h1 class="welcome-title">Welcome back, <span id="user-name">Loading...</span>!</h1>
+                    <h1 class="welcome-title">Welcome back, <span id="user-name">Alex Johnson</span>!</h1>
                     <p class="welcome-subtitle">Manage your sustainable fashion journey</p>
                 </div>
                 <div class="stats-grid">
@@ -49,7 +54,7 @@
                             <i class="fas fa-tshirt"></i>
                         </div>
                         <div class="stat-content">
-                            <h3 class="stat-number" id="total-listings">0</h3>
+                            <h3 class="stat-number" id="total-listings">8</h3>
                             <p class="stat-label">Items Listed</p>
                         </div>
                     </div>
@@ -58,7 +63,7 @@
                             <i class="fas fa-exchange-alt"></i>
                         </div>
                         <div class="stat-content">
-                            <h3 class="stat-number" id="total-swaps">0</h3>
+                            <h3 class="stat-number" id="total-swaps">12</h3>
                             <p class="stat-label">Successful Swaps</p>
                         </div>
                     </div>
@@ -67,7 +72,7 @@
                             <i class="fas fa-coins"></i>
                         </div>
                         <div class="stat-content">
-                            <h3 class="stat-number" id="total-points">0</h3>
+                            <h3 class="stat-number" id="total-points">1,250</h3>
                             <p class="stat-label">Total Points</p>
                         </div>
                     </div>
@@ -91,41 +96,85 @@
                     <div class="profile-card">
                         <div class="profile-info">
                             <div class="profile-avatar">
-                                <img src="https://via.placeholder.com/100x100/4CAF50/FFFFFF?text=U" alt="Profile Avatar" id="profile-avatar">
+                                <img src="https://gravatar.com/avatar/cc7a085c1972b02612cfc4f0dfabb6ca?s=400&d=robohash&r=x" alt="Profile Avatar" id="profile-avatar">
                             </div>
                             <div class="profile-details">
-                                <h3 class="profile-name" id="profile-name">Loading...</h3>
-                                <p class="profile-email" id="profile-email">Loading...</p>
-                                <p class="profile-joined">Member since <span id="profile-joined">Loading...</span></p>
+                                <h3 class="profile-name" id="profile-name">Alex Johnson</h3>
+                                <p class="profile-email" id="profile-email">alex.johnson@example.com</p>
+                                <p class="profile-joined">Member since <span id="profile-joined">Jan 2023</span></p>
                             </div>
                         </div>
                         <div class="profile-stats">
                             <div class="profile-stat">
-                                <span class="stat-value" id="profile-points">0</span>
+                                <span class="stat-value" id="profile-points">1,250</span>
                                 <span class="stat-label">Points</span>
                             </div>
                             <div class="profile-stat">
-                                <span class="stat-value" id="profile-rating">5.0</span>
+                                <span class="stat-value" id="profile-rating">4.8</span>
                                 <span class="stat-label">Rating</span>
                             </div>
                         </div>
                     </div>
                 </section>
+                
+                <!-- Swap Requests Section -->
                 <section class="swap-requests-section">
-    <div class="section-header">
-      <h2 class="section-title">
-        <i class="fas fa-bell"></i>
-        Incoming Swap Requests
-      </h2>
-    </div>
-    <div id="swap-requests-list">
-      <div class="loading-placeholder">
-        <i class="fas fa-spinner fa-spin"></i>
-        <p>Loading your requests...</p>
-      </div>
-    </div>
-  </section>
-
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <i class="fas fa-bell"></i>
+                            Incoming Swap Requests
+                        </h2>
+                    </div>
+                    <div id="swap-requests-list">
+                        <div class="request-card" id="request-1">
+                            <div class="request-header">
+                                <div class="requester-info">
+                                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Requester" class="requester-avatar">
+                                    <div>
+                                        <div class="requester-name">Sarah Williams</div>
+                                        <div class="request-date">Today, 10:24 AM</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="request-item">
+                                <img src="https://images.unsplash.com/photo-1523381294911-8d3cead13475?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80" alt="Item" class="item-image">
+                                <div class="item-details">
+                                    <div class="item-name">Vintage Denim Jacket</div>
+                                    <div class="item-condition">Good condition, size M</div>
+                                </div>
+                            </div>
+                            <div class="request-actions">
+                                <button class="btn btn-accept btn-small" data-request="1"><i class="fas fa-check"></i> Accept</button>
+                                <button class="btn btn-decline btn-small" data-request="1"><i class="fas fa-times"></i> Decline</button>
+                                <button class="btn btn-view btn-small"><i class="fas fa-eye"></i> View Items</button>
+                            </div>
+                        </div>
+                        
+                        <div class="request-card" id="request-2">
+                            <div class="request-header">
+                                <div class="requester-info">
+                                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Requester" class="requester-avatar">
+                                    <div>
+                                        <div class="requester-name">Michael Chen</div>
+                                        <div class="request-date">Yesterday, 4:30 PM</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="request-item">
+                                <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80" alt="Item" class="item-image">
+                                <div class="item-details">
+                                    <div class="item-name">Leather Messenger Bag</div>
+                                    <div class="item-condition">Excellent condition</div>
+                                </div>
+                            </div>
+                            <div class="request-actions">
+                                <button class="btn btn-accept btn-small" data-request="2"><i class="fas fa-check"></i> Accept</button>
+                                <button class="btn btn-decline btn-small" data-request="2"><i class="fas fa-times"></i> Decline</button>
+                                <button class="btn btn-view btn-small"><i class="fas fa-eye"></i> View Items</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
                 <!-- My Listings Section -->
                 <section class="listings-section">
@@ -134,12 +183,6 @@
                             <i class="fas fa-list"></i>
                             My Listings
                         </h2>
-                        <button class="btn btn-primary" id="add-item-btn">
-                            <i class="fas fa-plus"></i>
-                            Add New Item
-                        </button>
-                    </div>
-                    <div class="listings-content">
                         <div class="listings-filter">
                             <select class="filter-select" id="listings-filter">
                                 <option value="all">All Items</option>
@@ -147,12 +190,63 @@
                                 <option value="pending">Pending</option>
                                 <option value="completed">Completed</option>
                             </select>
+                            <button class="btn btn-primary" id="add-item-btn">
+                                <i class="fas fa-plus"></i>
+                                Add New Item
+                            </button>
                         </div>
+                    </div>
+                    <div class="listings-content">
                         <div class="listings-grid" id="listings-grid">
-                            <!-- Loading placeholder -->
-                            <div class="loading-placeholder">
-                                <i class="fas fa-spinner fa-spin"></i>
-                                <p>Loading your listings...</p>
+                            <div class="listing-card" data-status="active">
+                                <div class="listing-badge">Active</div>
+                                <img src="https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80" alt="Item" class="listing-image">
+                                <div class="listing-details">
+                                    <h3 class="listing-name">Red Flannel Shirt</h3>
+                                    <div class="listing-meta">
+                                        <span>Size: M</span>
+                                        <span>Category: Top</span>
+                                    </div>
+                                    <p class="listing-description">Soft cotton flannel shirt. Worn only a few times.</p>
+                                    <div class="listing-footer">
+                                        <div class="listing-points">85 pts</div>
+                                        <div class="listing-status status-active">Active</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="listing-card" data-status="pending">
+                                <div class="listing-badge">Pending</div>
+                                <img src="https://images.unsplash.com/photo-1543076447-215ad9ba6923?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80" alt="Item" class="listing-image">
+                                <div class="listing-details">
+                                    <h3 class="listing-name">Designer Jeans</h3>
+                                    <div class="listing-meta">
+                                        <span>Size: 32</span>
+                                        <span>Category: Bottom</span>
+                                    </div>
+                                    <p class="listing-description">High-quality denim with minimal wear.</p>
+                                    <div class="listing-footer">
+                                        <div class="listing-points">120 pts</div>
+                                        <div class="listing-status status-pending">Pending Swap</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="listing-card" data-status="completed">
+                                <div class="listing-badge">Completed</div>
+                                <img src="https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80" alt="Item" class="listing-image">
+                                <div class="listing-details">
+                                    <h3 class="listing-name">Winter Parka</h3>
+                                    <div class="listing-meta">
+                                        <span>Size: L</span>
+                                        <span>Category: Outerwear</span>
+                                    </div>
+                                    <p class="listing-description">Warm winter coat with faux fur hood.</p>
+                                    <div class="listing-footer">
+                                        <div class="listing-points">200 pts</div>
+                                        <div class="listing-status status-completed">Completed</div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -175,10 +269,37 @@
                     </div>
                     <div class="purchases-content">
                         <div class="purchases-list" id="purchases-list">
-                            <!-- Loading placeholder -->
-                            <div class="loading-placeholder">
-                                <i class="fas fa-spinner fa-spin"></i>
-                                <p>Loading your purchases...</p>
+                            <div class="transaction-card" data-type="swap">
+                                <div class="transaction-icon">
+                                    <i class="fas fa-exchange-alt"></i>
+                                </div>
+                                <div class="transaction-details">
+                                    <div class="transaction-title">Swap: Vintage Denim Jacket</div>
+                                    <div class="transaction-date">July 10, 2023</div>
+                                </div>
+                                <div class="transaction-amount">-120 pts</div>
+                            </div>
+                            
+                            <div class="transaction-card" data-type="points">
+                                <div class="transaction-icon">
+                                    <i class="fas fa-coins"></i>
+                                </div>
+                                <div class="transaction-details">
+                                    <div class="transaction-title">Point Purchase</div>
+                                    <div class="transaction-date">July 5, 2023</div>
+                                </div>
+                                <div class="transaction-amount">+500 pts</div>
+                            </div>
+                            
+                            <div class="transaction-card" data-type="swap">
+                                <div class="transaction-icon">
+                                    <i class="fas fa-exchange-alt"></i>
+                                </div>
+                                <div class="transaction-details">
+                                    <div class="transaction-title">Swap: Leather Messenger Bag</div>
+                                    <div class="transaction-date">June 28, 2023</div>
+                                </div>
+                                <div class="transaction-amount">+150 pts</div>
                             </div>
                         </div>
                     </div>
@@ -200,15 +321,15 @@
                 <form id="edit-profile-form">
                     <div class="form-group">
                         <label for="edit-name">Full Name</label>
-                        <input type="text" id="edit-name" name="name" required>
+                        <input type="text" id="edit-name" name="name" value="Alex Johnson" required>
                     </div>
                     <div class="form-group">
                         <label for="edit-email">Email</label>
-                        <input type="email" id="edit-email" name="email" required>
+                        <input type="email" id="edit-email" name="email" value="alex.johnson@example.com" required>
                     </div>
                     <div class="form-group">
                         <label for="edit-bio">Bio</label>
-                        <textarea id="edit-bio" name="bio" rows="3" placeholder="Tell us about yourself..."></textarea>
+                        <textarea id="edit-bio" name="bio" rows="3" placeholder="Tell us about yourself...">Sustainable fashion enthusiast with a passion for vintage finds and reducing textile waste. Let's make fashion circular!</textarea>
                     </div>
                     <div class="form-actions">
                         <button type="button" class="btn btn-secondary" id="cancel-edit">Cancel</button>
@@ -218,20 +339,74 @@
             </div>
         </div>
     </div>
-<!-- View Requester Items Modal -->
-<div class="modal" id="view-items-modal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h3>Items by This User</h3>
-      <button class="modal-close" onclick="closeItemsModal()">
-        <i class="fas fa-times"></i>
-      </button>
+
+    <!-- Add Item Modal -->
+    <div class="modal" id="add-item-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Item</h3>
+                <button class="modal-close" id="close-add-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="add-item-form">
+                    <div class="form-group">
+                        <label for="item-name">Item Name</label>
+                        <input type="text" id="item-name" name="item-name" required placeholder="Enter item name">
+                    </div>
+                    <div class="form-group">
+                        <label for="item-description">Description</label>
+                        <textarea id="item-description" name="description" rows="3" placeholder="Describe your item..." required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="item-category">Category</label>
+                        <select id="item-category" name="category" required>
+                            <option value="">Select category</option>
+                            <option value="top">Top</option>
+                            <option value="bottom">Bottom</option>
+                            <option value="outerwear">Outerwear</option>
+                            <option value="accessory">Accessory</option>
+                            <option value="footwear">Footwear</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="item-size">Size</label>
+                        <select id="item-size" name="size" required>
+                            <option value="">Select size</option>
+                            <option value="xs">XS</option>
+                            <option value="s">S</option>
+                            <option value="m">M</option>
+                            <option value="l">L</option>
+                            <option value="xl">XL</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="item-condition">Condition</label>
+                        <select id="item-condition" name="condition" required>
+                            <option value="">Select condition</option>
+                            <option value="new">New with tags</option>
+                            <option value="excellent">Excellent</option>
+                            <option value="good">Good</option>
+                            <option value="fair">Fair</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="item-points">Points Value</label>
+                        <input type="number" id="item-points" name="points" required placeholder="Enter points value">
+                    </div>
+                    <div class="form-group">
+                        <label for="item-image">Upload Image</label>
+                        <input type="file" id="item-image" name="image" accept="image/*">
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancel-add">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Add Item</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-    <div class="modal-body" id="requester-items-body">
-      <p>Loading...</p>
-    </div>
-  </div>
-</div>
 
     <!-- Loading Overlay -->
     <div class="loading-overlay" id="loading-overlay">
