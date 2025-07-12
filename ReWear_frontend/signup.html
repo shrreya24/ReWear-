@@ -82,7 +82,7 @@
     </div>
   </div>
 
- <script>
+<script>
   let currentSection = 1;
 
   function nextSection() {
@@ -114,46 +114,22 @@
     document.getElementById('fileName').textContent = fileName;
   });
 
-  // 🚀 Connect to backend on form submit
-  document.getElementById('signupForm').addEventListener('submit', async function (e) {
+  // ✅ Simplified navigation instead of backend signup
+  document.getElementById('signupForm').addEventListener('submit', function (e) {
     e.preventDefault();
 
-    const fullName = document.querySelector('input[placeholder="Enter your full name"]').value;
-    const email = document.querySelector('input[type="email"]').value;
     const password = document.querySelector('input[placeholder="Create a password"]').value;
     const confirmPassword = document.querySelector('input[placeholder="Re-enter your password"]').value;
-    const location = document.querySelector('select').value;
-    const pincode = document.querySelector('input[placeholder="6-digit pincode"]').value;
 
     if (password !== confirmPassword) {
       alert("❌ Passwords do not match.");
       return;
     }
 
-    try {
-      const response = await fetch("http://localhost:5000/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ fullName, email, password, location, pincode })
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        alert("✅ Signup successful!");
-        localStorage.setItem("userToken", data.token);
-        window.location.href = "dashboard.html";
-      } else {
-        alert("❌ " + (data.message || "Signup failed."));
-      }
-
-    } catch (err) {
-      console.error("Signup Error:", err);
-      alert("❌ Server error. Please try again later.");
-    }
+    alert("✅ Signup simulated! Redirecting to dashboard...");
+    window.location.href = "dashboard.html";
   });
 
-  // Initial progress fill
   updateProgressBar();
 </script>
 
