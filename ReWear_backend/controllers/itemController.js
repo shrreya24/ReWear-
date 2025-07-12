@@ -1,32 +1,23 @@
+// controllers/itemController.js
 const Item = require('../models/Item');
 
-exports.addItem = async (req, res) => {
+exports.createItem = async (req, res) => {
   try {
-    const { title, description, category, size, condition, tags, image, uploader } = req.body;
+    const { title, description, yearsUsed } = req.body;
+    const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
 
-    const item = new Item({
+    const newItem = new Item({
       title,
       description,
-      category,
-      size,
-      condition,
-      tags,
-      image,
-      uploader
+      yearsUsed,
+      image: imageUrl,
+      owner: req.user._id,
+      status: 'active'
     });
-
-    await item.save();
-    res.status(201).json({ message: 'Item listed successfully', item });
+    await newItem.save();
+    res.status(201).json(newItem);
   } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-};
-
-exports.getAllItems = async (req, res) => {
-  try {
-    const items = await Item.find().populate('uploader', 'fullName email');
-    res.status(200).json(items);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error('Create item error:', err);
+    res.status(500).json({ message: 'Failed to save item' });
   }
 };

@@ -9,5 +9,5 @@ const userSchema = new mongoose.Schema({
   createdAt:{ type: Date, default: Date.now }
 });
 
-// ✅ FIX: Prevent model overwrite error
+// ✅ Prevent Overwrite Error
 module.exports = mongoose.models.User || mongoose.model("User", userSchema);
