@@ -8,6 +8,9 @@ fashion and reduce textile waste by encouraging users to reuse wearable garments
 discarding them. 
 
 Team members : 
+<br>
 Shreya Hole : shrreya.hole24@gmail.com
+<br>
 Deepanshu Chauhan : deepanshueng16@gmail.com
+<br>
 Naman Jain : nj260106@gmail.com
