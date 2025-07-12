@@ -1,22 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ReWear - Browse Sustainable Fashion</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ReWear - Sustainable Fashion Marketplace</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
       --primary-green: #4CAF50;
       --dark-green: #2E8B57;
-      --light-green: #E8F5E9;
       --cream: #F5F5F0;
       --beige: #D9CBA3;
+      --clay: #D87D4A;
       --charcoal: #333333;
       --white: #ffffff;
-      --light-gray: #f8f8f8;
-      --shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      --nav-height: 80px;
     }
 
     * {
@@ -27,41 +29,34 @@
 
     body {
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, var(--light-green) 0%, var(--cream) 100%);
+      background-color: var(--cream);
       color: var(--charcoal);
-      min-height: 100vh;
-      padding: 20px;
-      position: relative;
       overflow-x: hidden;
     }
 
-    body::before {
-      content: "";
-      position: absolute;
+    /* ===== Premium Navbar ===== */
+    .navbar {
+      height: var(--nav-height);
+      background-color: var(--cream);
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+      position: fixed;
+      width: 100%;
       top: 0;
-      left: 0;
-      right: 0;
-      height: 300px;
-      background: linear-gradient(135deg, var(--primary-green) 0%, var(--dark-green) 100%);
-      z-index: -1;
-      border-radius: 0 0 40px 40px;
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    /* Header Styles */
-    .header {
+      z-index: 1000;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 20px 0;
-      margin-bottom: 40px;
+      padding: 0 5%;
+      transition: all 0.4s ease;
     }
 
-    .logo {
+    .navbar.scrolled {
+      height: 70px;
+      background-color: rgba(245, 245, 240, 0.98);
+      backdrop-filter: blur(5px);
+    }
+
+    .logo-container {
       display: flex;
       align-items: center;
       gap: 12px;
@@ -69,16 +64,63 @@
 
     .logo-img {
       height: 40px;
+      transition: var(--transition);
     }
 
     .logo-text {
       font-size: 24px;
       font-weight: 700;
-      color: var(--white);
-      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      background: linear-gradient(to right, var(--primary-green), var(--dark-green));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
-    .nav-controls {
+    .nav-links {
+      display: flex;
+      gap: 25px;
+      margin-right: auto;
+      margin-left: 50px;
+    }
+
+    .nav-links a {
+      color: var(--charcoal);
+      text-decoration: none;
+      font-weight: 500;
+      position: relative;
+      padding: 10px 0;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 15px;
+    }
+
+    .nav-links a i {
+      font-size: 14px;
+      width: 20px;
+      text-align: center;
+    }
+
+    .nav-links a:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 3px;
+      background: linear-gradient(to right, var(--primary-green), var(--dark-green));
+      transition: var(--transition);
+    }
+
+    .nav-links a:hover:after {
+      width: 100%;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary-green);
+    }
+
+    .nav-actions {
       display: flex;
       gap: 15px;
       align-items: center;
@@ -89,7 +131,7 @@
       border-radius: 30px;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: var(--transition);
       display: flex;
       align-items: center;
       gap: 8px;
@@ -98,373 +140,776 @@
 
     .login-btn {
       background: transparent;
-      border: 2px solid var(--white);
-      color: var(--white);
+      border: 2px solid var(--primary-green);
+      color: var(--primary-green);
     }
 
     .login-btn:hover {
-      background-color: rgba(255, 255, 255, 0.1);
+      background-color: rgba(76, 175, 80, 0.1);
     }
 
     .signup-btn {
-      background: var(--white);
-      color: var(--primary-green);
+      background: linear-gradient(to right, var(--primary-green), var(--dark-green));
+      color: var(--white);
       border: none;
-      box-shadow: var(--shadow);
+      box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
     }
 
     .signup-btn:hover {
       transform: translateY(-3px);
-      box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
+      box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
     }
 
-    /* Page Title */
-    .page-header {
+    .hamburger {
+      display: none;
+      cursor: pointer;
+      font-size: 24px;
+    }
+
+    /* ===== Hero Slider ===== */
+    .hero-slider {
+      height: 100vh;
+      margin-top: var(--nav-height);
+      position: relative;
+    }
+
+    .swiper {
+      width: 100%;
+      height: 100%;
+    }
+
+    .swiper-slide {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .slide-bg {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+      transition: transform 8s ease-out;
+    }
+
+    .swiper-slide-active .slide-bg {
+      transform: scale(1.05);
+    }
+
+    .slide-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 0;
+    }
+
+    .slide-content {
+      max-width: 1200px;
+      padding: 0 5%;
+      color: var(--white);
       text-align: center;
-      margin-bottom: 50px;
+      position: relative;
+      z-index: 1;
+      transform: translateY(50px);
+      opacity: 0;
+      transition: all 0.8s ease;
+    }
+
+    .swiper-slide-active .slide-content {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .slide-content h1 {
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-weight: 700;
+      margin-bottom: 20px;
+      line-height: 1.2;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .slide-content p {
+      font-size: clamp(1rem, 2vw, 1.3rem);
+      max-width: 700px;
+      margin: 0 auto 40px;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    .hero-btn {
+      display: inline-block;
+      padding: 15px 35px;
+      background: linear-gradient(to right, var(--primary-green), var(--dark-green));
+      color: var(--white);
+      border-radius: 50px;
+      font-weight: 600;
+      text-decoration: none;
+      box-shadow: 0 4px 20px rgba(76, 175, 80, 0.4);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-btn:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 30px rgba(76, 175, 80, 0.6);
+    }
+
+    .hero-btn:after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: 0.5s;
+    }
+
+    .hero-btn:hover:after {
+      left: 100%;
+    }
+
+    .swiper-pagination-bullet {
+      width: 12px;
+      height: 12px;
+      background: rgba(255, 255, 255, 0.5);
+      opacity: 1;
+      transition: var(--transition);
+    }
+
+    .swiper-pagination-bullet-active {
+      background: var(--white);
+      transform: scale(1.3);
+    }
+
+    .swiper-button-next,
+    .swiper-button-prev {
+      color: var(--white);
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(5px);
+      transition: var(--transition);
+    }
+
+    .swiper-button-next:hover,
+    .swiper-button-prev:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(1.1);
+    }
+
+    /* ===== Features Section ===== */
+    .features-section {
+      padding: 100px 5%;
+      background-color: var(--white);
     }
 
     .section-title {
-      font-size: 36px;
-      font-weight: 700;
-      color: var(--white);
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .section-title h2 {
+      font-size: 2.5rem;
+      color: var(--charcoal);
       margin-bottom: 15px;
       position: relative;
       display: inline-block;
     }
 
-    .section-title::after {
+    .section-title h2:after {
       content: '';
       position: absolute;
       bottom: -10px;
       left: 50%;
       transform: translateX(-50%);
-      width: 100px;
+      width: 80px;
       height: 4px;
-      background: var(--white);
+      background: linear-gradient(to right, var(--primary-green), var(--dark-green));
       border-radius: 2px;
     }
 
-    .section-subtitle {
-      font-size: 18px;
-      color: rgba(255, 255, 255, 0.9);
-      max-width: 600px;
+    .section-title p {
+      color: #666;
+      max-width: 700px;
       margin: 0 auto;
     }
 
-    /* Filter Section */
-    .filter-section {
-      background: var(--white);
-      border-radius: 20px;
-      padding: 25px;
-      margin-bottom: 40px;
-      box-shadow: var(--shadow);
-    }
-
-    .filter-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-
-    .filter-title {
-      font-size: 22px;
-      font-weight: 600;
-      color: var(--charcoal);
-    }
-
-    .filter-reset {
-      background: linear-gradient(135deg, var(--primary-green), var(--dark-green));
-      color: white;
-      border: none;
-      border-radius: 30px;
-      padding: 8px 20px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .filter-reset:hover {
-      background: linear-gradient(135deg, #45A049, #2E8B57);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
-    }
-
-    .filter-options {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
-    }
-
-    .filter-group {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .filter-label {
-      font-size: 14px;
-      font-weight: 600;
-      color: #666;
-      margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .filter-select {
-      padding: 12px 15px;
-      border-radius: 12px;
-      border: 1px solid #ddd;
-      background: var(--cream);
-      font-family: 'Poppins', sans-serif;
-      font-size: 14px;
-      transition: all 0.3s ease;
-      cursor: pointer;
-    }
-
-    .filter-select:focus {
-      outline: none;
-      border-color: var(--primary-green);
-      box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
-    }
-
-    .search-container {
-      position: relative;
-      grid-column: 1 / -1;
-    }
-
-    .search-input {
-      padding: 12px 15px 12px 45px;
-      border-radius: 12px;
-      border: 1px solid #ddd;
-      background: var(--cream);
-      font-family: 'Poppins', sans-serif;
-      font-size: 14px;
-      width: 100%;
-      transition: all 0.3s ease;
-    }
-
-    .search-input:focus {
-      outline: none;
-      border-color: var(--primary-green);
-      box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
-    }
-
-    .search-icon {
-      position: absolute;
-      left: 15px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #777;
-    }
-
-    /* Item Grid */
-    .item-grid {
+    .features-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 30px;
-      margin-bottom: 60px;
+      max-width: 1200px;
+      margin: 0 auto;
     }
 
-    .item-card {
-      background: var(--white);
-      border-radius: 20px;
-      overflow: hidden;
+    .feature-card {
+      background-color: var(--cream);
+      border-radius: 15px;
+      padding: 40px 30px;
+      text-align: center;
+      transition: var(--transition);
       box-shadow: var(--shadow);
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       position: relative;
-      display: flex;
-      flex-direction: column;
-      height: 100%;
+      overflow: hidden;
     }
 
-    .item-card:hover {
-      transform: translateY(-10px) scale(1.02);
+    .feature-card:hover {
+      transform: translateY(-10px);
       box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
     }
 
-    .item-image-container {
-      position: relative;
-      height: 240px;
-      overflow: hidden;
+    .feature-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(to right, var(--primary-green), var(--dark-green));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 25px;
+      color: var(--white);
+      font-size: 30px;
+      box-shadow: 0 10px 20px rgba(76, 175, 80, 0.3);
     }
 
-    .item-image {
+    .feature-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      color: var(--charcoal);
+    }
+
+    .feature-card p {
+      color: #666;
+      line-height: 1.6;
+    }
+
+    /* ===== Featured Items ===== */
+    .featured-section {
+      padding: 100px 5%;
+      background-color: var(--cream);
+    }
+
+    .items-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .item-card {
+      background-color: var(--white);
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .item-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .item-img {
       width: 100%;
-      height: 100%;
+      height: 300px;
       object-fit: cover;
       transition: transform 0.5s ease;
     }
 
-    .item-card:hover .item-image {
-      transform: scale(1.1);
+    .item-card:hover .item-img {
+      transform: scale(1.05);
+    }
+
+    .item-info {
+      padding: 20px;
+      position: relative;
+    }
+
+    .item-info h3 {
+      margin-bottom: 10px;
+      color: var(--charcoal);
+    }
+
+    .item-price {
+      color: var(--primary-green);
+      font-weight: 600;
+      font-size: 1.2rem;
     }
 
     .item-badge {
       position: absolute;
-      top: 15px;
-      right: 15px;
-      background: linear-gradient(135deg, var(--primary-green), var(--dark-green));
+      top: -20px;
+      right: 20px;
+      background: linear-gradient(to right, var(--primary-green), var(--dark-green));
       color: var(--white);
-      padding: 6px 15px;
+      padding: 5px 15px;
       border-radius: 20px;
-      font-size: 12px;
-      font-weight: 600;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-      z-index: 2;
+      font-size: 0.9rem;
+      font-weight: 500;
+      box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
     }
 
-    .item-content {
+    /* ===== Testimonials ===== */
+    .testimonials-section {
+      padding: 100px 5%;
+      background-color: var(--white);
+    }
+
+    .testimonials-slider {
+      max-width: 1000px;
+      margin: 0 auto;
       padding: 20px;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
     }
 
-    .item-title {
-      font-size: 20px;
-      font-weight: 600;
-      color: var(--charcoal);
-      margin-bottom: 10px;
+    .testimonial-card {
+      background-color: var(--cream);
+      border-radius: 15px;
+      padding: 40px;
+      box-shadow: var(--shadow);
+      margin: 20px;
+      position: relative;
     }
 
-    .item-description {
-      font-size: 14px;
-      color: #666;
-      margin-bottom: 15px;
-      flex: 1;
-    }
-
-    .item-meta {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 20px;
-      font-size: 13px;
-      color: #777;
-    }
-
-    .meta-item {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .item-points {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 18px;
-      font-weight: 700;
+    .testimonial-card:before {
+      content: '"';
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      font-size: 5rem;
       color: var(--primary-green);
-      margin-bottom: 15px;
+      opacity: 0.1;
+      font-family: Georgia, serif;
+      line-height: 1;
     }
 
-    .interested-btn {
-      background: linear-gradient(135deg, var(--primary-green), var(--dark-green));
-      border: none;
-      border-radius: 12px;
-      color: var(--white);
-      font-weight: 600;
-      padding: 14px;
+    .testimonial-content {
+      font-size: 1.1rem;
+      color: var(--charcoal);
+      line-height: 1.8;
+      margin-bottom: 30px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .author-avatar {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      overflow: hidden;
+    }
+
+    .author-avatar img {
       width: 100%;
-      cursor: pointer;
-      transition: all 0.3s ease;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .author-info h4 {
+      color: var(--charcoal);
+      font-size: 1.2rem;
+      margin-bottom: 5px;
+    }
+
+    .author-info p {
+      color: var(--primary-green);
+      font-weight: 500;
+    }
+
+    .testimonials-slider .swiper-pagination {
+      position: relative;
+      margin-top: 40px;
+    }
+
+    /* ===== Stats Section ===== */
+    .stats-section {
+      padding: 80px 5%;
+      background: linear-gradient(135deg, var(--primary-green) 0%, var(--dark-green) 100%);
+      color: var(--white);
+      text-align: center;
+    }
+
+    .stats-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .stat-item {
+      flex: 1;
+      min-width: 200px;
+      padding: 30px;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s ease;
+    }
+
+    .stat-item.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .stat-value {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: var(--white);
+    }
+
+    .stat-label {
+      font-size: 1.2rem;
+      font-weight: 500;
+    }
+
+    /* ===== CTA Section ===== */
+    .cta-section {
+      padding: 100px 5%;
+      background-color: var(--cream);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 60px;
+      background-color: var(--white);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta-container:before {
+      content: '';
+      position: absolute;
+      top: -50px;
+      right: -50px;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: var(--primary-green);
+      opacity: 0.1;
+      z-index: -1;
+    }
+
+    .cta-container h2 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      color: var(--charcoal);
+    }
+
+    .cta-container p {
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 1.1rem;
+    }
+
+    .cta-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .cta-btn {
+      padding: 15px 35px;
+      border-radius: 50px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .primary-btn {
+      background: linear-gradient(to right, var(--primary-green), var(--dark-green));
+      color: var(--white);
+      box-shadow: 0 4px 20px rgba(76, 175, 80, 0.4);
+    }
+
+    .primary-btn:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 30px rgba(76, 175, 80, 0.6);
+    }
+
+    .secondary-btn {
+      border: 2px solid var(--primary-green);
+      color: var(--primary-green);
+    }
+
+    .secondary-btn:hover {
+      background-color: rgba(76, 175, 80, 0.1);
+      transform: translateY(-5px);
+    }
+
+    /* ===== Footer ===== */
+    .footer {
+      background-color: var(--charcoal);
+      color: var(--white);
+      padding: 80px 5% 30px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 40px;
+      max-width: 1200px;
+      margin: 0 auto 50px;
+    }
+
+    .footer-brand {
+      margin-bottom: 20px;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .footer-logo img {
+      height: 40px;
+    }
+
+    .footer-logo span {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    .footer-about p {
+      color: #aaa;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 15px;
+    }
+
+    .social-link {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.1);
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+      transition: var(--transition);
     }
 
-    .interested-btn:hover {
-      background: linear-gradient(135deg, #45A049, #2E8B57);
-      box-shadow: 0 8px 25px rgba(46, 139, 87, 0.4);
+    .social-link:hover {
+      background-color: var(--primary-green);
       transform: translateY(-3px);
     }
 
-    .interested-btn:active {
-      transform: translateY(1px);
+    .footer-links h3 {
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+      position: relative;
+      padding-bottom: 10px;
     }
 
-    /* Footer */
-    .footer {
-      background: rgba(255, 255, 255, 0.7);
-      backdrop-filter: blur(10px);
-      border-radius: 20px;
-      padding: 30px;
-      text-align: center;
-      margin-top: 30px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    .footer-links h3:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 40px;
+      height: 3px;
+      background: var(--primary-green);
     }
 
-    .footer-text {
-      font-size: 14px;
-      color: #666;
-      margin-bottom: 10px;
+    .footer-links ul {
+      list-style: none;
     }
 
-    .footer-links {
-      display: flex;
-      justify-content: center;
-      gap: 25px;
-      margin-top: 15px;
+    .footer-links li {
+      margin-bottom: 12px;
     }
 
-    .footer-link {
-      color: var(--primary-green);
+    .footer-links a {
+      color: #aaa;
       text-decoration: none;
-      font-weight: 500;
-      transition: all 0.3s ease;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
-    .footer-link:hover {
-      color: var(--dark-green);
-      text-decoration: underline;
+    .footer-links a:hover {
+      color: var(--white);
+      padding-left: 5px;
     }
 
-    /* Responsive Design */
+    .footer-links a i {
+      color: var(--primary-green);
+      font-size: 14px;
+    }
+
+    .footer-newsletter p {
+      color: #aaa;
+      margin-bottom: 20px;
+    }
+
+    .newsletter-form {
+      display: flex;
+      gap: 10px;
+    }
+
+    .newsletter-input {
+      flex: 1;
+      padding: 12px 15px;
+      border-radius: 5px;
+      border: none;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: var(--white);
+    }
+
+    .newsletter-input::placeholder {
+      color: #ccc;
+    }
+
+    .newsletter-btn {
+      background: var(--primary-green);
+      color: var(--white);
+      border: none;
+      padding: 0 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .newsletter-btn:hover {
+      background: var(--dark-green);
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding-top: 30px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      color: #aaa;
+      font-size: 0.9rem;
+    }
+
+    /* ===== Responsive Design ===== */
+    @media (max-width: 992px) {
+      .nav-links {
+        gap: 15px;
+        margin-left: 30px;
+      }
+      
+      .nav-btn {
+        padding: 8px 15px;
+      }
+    }
+
     @media (max-width: 768px) {
-      .header {
+      .navbar {
+        padding: 0 20px;
+      }
+      
+      .nav-links {
+        position: fixed;
+        top: var(--nav-height);
+        left: -100%;
+        width: 80%;
+        height: calc(100vh - var(--nav-height));
+        background-color: var(--cream);
         flex-direction: column;
-        gap: 20px;
+        align-items: center;
+        justify-content: center;
+        gap: 30px;
+        transition: var(--transition);
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        margin: 0;
       }
       
-      .section-title {
-        font-size: 28px;
+      .nav-links.active {
+        left: 0;
       }
       
-      .section-subtitle {
-        font-size: 16px;
+      .hamburger {
+        display: block;
       }
       
-      .filter-options {
-        grid-template-columns: 1fr;
+      .hero-slider {
+        height: 80vh;
+      }
+      
+      .slide-content h1 {
+        font-size: 2.5rem;
+      }
+      
+      .cta-container {
+        padding: 40px 20px;
+      }
+      
+      .cta-buttons {
+        flex-direction: column;
+        gap: 15px;
       }
     }
 
     @media (max-width: 480px) {
-      body {
-        padding: 15px;
+      .logo-text {
+        font-size: 20px;
       }
       
-      .item-grid {
+      .hero-slider {
+        height: 70vh;
+      }
+      
+      .slide-content h1 {
+        font-size: 2rem;
+      }
+      
+      .items-grid {
         grid-template-columns: 1fr;
       }
       
-      .section-title {
-        font-size: 24px;
+      .testimonial-card {
+        padding: 30px 20px;
+      }
+      
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .newsletter-form {
+        flex-direction: column;
+      }
+      
+      .newsletter-btn {
+        padding: 12px;
       }
     }
 
-    /* Animation */
-    @keyframes fadeIn {
+    /* ===== Animations ===== */
+    @keyframes fadeInUp {
       from {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(30px);
       }
       to {
         opacity: 1;
@@ -472,413 +917,404 @@
       }
     }
 
-    .item-card {
-      animation: fadeIn 0.6s ease forwards;
-      opacity: 0;
+    .animate {
+      animation: fadeInUp 1s ease forwards;
     }
 
-    .item-card:nth-child(1) { animation-delay: 0.1s; }
-    .item-card:nth-child(2) { animation-delay: 0.2s; }
-    .item-card:nth-child(3) { animation-delay: 0.3s; }
-    .item-card:nth-child(4) { animation-delay: 0.4s; }
-    .item-card:nth-child(5) { animation-delay: 0.5s; }
-    .item-card:nth-child(6) { animation-delay: 0.6s; }
-    
-    .no-results {
-      grid-column: 1 / -1;
-      text-align: center;
-      padding: 40px;
-      background: var(--white);
-      border-radius: 20px;
-      box-shadow: var(--shadow);
+    .delay-1 {
+      animation-delay: 0.2s;
     }
-    
-    .no-results i {
-      font-size: 48px;
-      color: #ccc;
-      margin-bottom: 20px;
+
+    .delay-2 {
+      animation-delay: 0.4s;
+    }
+
+    .delay-3 {
+      animation-delay: 0.6s;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <!-- Header -->
-    <div class="header">
-      <div class="logo">
-        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%234CAF50' d='M12 3L2 12h3v8h14v-8h3L12 3m0 5.5c2.34 0 4.24 1.85 4.46 4.13c.78-.27 1.54-.73 2.24-1.31c-1.36-2.84-4.44-4.82-8.7-4.82c-4.26 0-7.34 1.98-8.7 4.82c.7.58 1.46 1.04 2.24 1.31C7.76 10.35 9.66 8.5 12 8.5Z'/%3E%3C/svg%3E" alt="ReWear Logo" class="logo-img">
-        <span class="logo-text">ReWear</span>
-      </div>
-      <div class="nav-controls">
-        <button class="nav-btn login-btn">
-          <i class="fas fa-user"></i> My Account
-        </button>
-        <button class="nav-btn signup-btn">
-          <i class="fas fa-plus"></i> List Item
-        </button>
-      </div>
+  <!-- Premium Navbar -->
+  <nav class="navbar">
+    <div class="logo-container">
+      <img src="images/logo.png" alt="ReWear Logo" class="logo-img">
+      <span class="logo-text">ReWear</span>
     </div>
-
-    <!-- Page Header -->
-    <div class="page-header">
-      <h1 class="section-title">Browse Sustainable Fashion</h1>
-      <p class="section-subtitle">Discover pre-loved treasures and give clothes a second life</p>
+    
+    <ul class="nav-links">
+      <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="browse.html"><i class="fas fa-shopping-bag"></i> Buy Items</a></li>
+      <li><a href="dashboard.html"><i class="fas fa-tag"></i> Sell Items</a></li>
+      <li><a href="dashboard.html"><i class="fas fa-chart-line"></i> Profile</a></li>
+     
+    </ul>
+    
+   <div class="nav-actions">
+  <a href="login.html" class="nav-btn login-btn"><i class="fas fa-sign-in-alt"></i> Login</a>
+  <a href="signup.html" class="nav-btn signup-btn"><i class="fas fa-user-plus"></i> Sign Up</a>
+</div>
+    <div class="hamburger">
+      <i class="fas fa-bars"></i>
     </div>
+  </nav>
 
-    <!-- Filter Section -->
-    <div class="filter-section">
-      <div class="filter-header">
-        <h2 class="filter-title">Filter Items</h2>
-        <button id="resetFilters" class="filter-reset">
-          <i class="fas fa-sync-alt"></i> Reset Filters
-        </button>
-      </div>
-      <div class="filter-options">
-        <div class="filter-group">
-          <label class="filter-label"><i class="fas fa-tag"></i> Category</label>
-          <select id="categoryFilter" class="filter-select">
-            <option value="all">All Categories</option>
-            <option value="tops">Tops</option>
-            <option value="bottoms">Bottoms</option>
-            <option value="dresses">Dresses</option>
-            <option value="outerwear">Outerwear</option>
-            <option value="accessories">Accessories</option>
-          </select>
+  <!-- Hero Slider with Dynamic Backgrounds -->
+  <section class="hero-slider">
+    <div class="swiper">
+      <div class="swiper-wrapper">
+        <!-- Slide 1 -->
+        <div class="swiper-slide">
+          <img src="https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Sustainable Fashion" class="slide-bg">
+          <div class="slide-overlay"></div>
+          <div class="slide-content">
+            <h1 class="animate">Give Clothes a Second Life</h1>
+            <p class="animate delay-1">Join thousands of eco-conscious swappers reducing textile waste</p>
+            <a href="signup.html" class="hero-btn animate delay-2">Start Swapping</a>
+          </div>
         </div>
-        <div class="filter-group">
-          <label class="filter-label"><i class="fas fa-ruler"></i> Size</label>
-          <select id="sizeFilter" class="filter-select">
-            <option value="all">All Sizes</option>
-            <option value="xs">XS</option>
-            <option value="s">S</option>
-            <option value="m">M</option>
-            <option value="l">L</option>
-            <option value="xl">XL</option>
-          </select>
+        
+        <!-- Slide 2 -->
+        <div class="swiper-slide">
+         <img src="https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1935&q=80" alt="Fashion Community" class="slide-bg">
+          <div class="slide-overlay"></div>
+          <div class="slide-content">
+            <h1 class="animate">Discover Unique Styles</h1>
+            <p class="animate delay-1">Find pre-loved fashion gems from our global community</p>
+            <a href="signup.html" class="hero-btn animate delay-2">Browse Items</a>
+          </div>
         </div>
-        <div class="filter-group">
-          <label class="filter-label"><i class="fas fa-star"></i> Condition</label>
-          <select id="conditionFilter" class="filter-select">
-            <option value="all">Any Condition</option>
-            <option value="new">New</option>
-            <option value="like-new">Like New</option>
-            <option value="good">Good</option>
-            <option value="fair">Fair</option>
-          </select>
-        </div>
-        <div class="filter-group">
-          <label class="filter-label"><i class="fas fa-coins"></i> Points Range</label>
-          <select id="pointsFilter" class="filter-select">
-            <option value="all">All Points</option>
-            <option value="0-500">0-500 points</option>
-            <option value="500-1000">500-1000 points</option>
-            <option value="1000-2000">1000-2000 points</option>
-            <option value="2000+">2000+ points</option>
-          </select>
-        </div>
-        <div class="filter-group search-container">
-          <label class="filter-label"><i class="fas fa-search"></i> Search</label>
-          <div style="position: relative;">
-            <i class="fas fa-search search-icon"></i>
-            <input type="text" id="searchInput" class="search-input" placeholder="Search items...">
+        
+        <!-- Slide 3 -->
+        <div class="swiper-slide">
+          <img src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Earn Points" class="slide-bg">
+          <div class="slide-overlay"></div>
+          <div class="slide-content">
+            <h1 class="animate">Earn While You Swap</h1>
+            <p class="animate delay-1">Redeem points for exclusive items or donate to eco causes</p>
+            <a href="signup.html" class="hero-btn animate delay-2">Learn How</a>
           </div>
         </div>
       </div>
+      
+      <!-- Slider Controls -->
+      <div class="swiper-pagination"></div>
+      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div>
     </div>
+  </section>
 
-    <!-- Item Grid -->
-    <div class="item-grid" id="itemGrid">
-      <!-- Items will be populated by JavaScript -->
+  <!-- Features Section -->
+  <section class="features-section">
+    <div class="section-title">
+      <h2>Why Choose ReWear?</h2>
+      <p>Experience the future of sustainable fashion</p>
     </div>
-
-    <!-- Footer -->
-    <div class="footer">
-      <p class="footer-text">Join our community of sustainable fashion lovers</p>
-      <p class="footer-text">© 2024 ReWear. Making fashion circular.</p>
-      <div class="footer-links">
-        <a href="#" class="footer-link">About Us</a>
-        <a href="#" class="footer-link">How It Works</a>
-        <a href="#" class="footer-link">Sustainability Impact</a>
-        <a href="#" class="footer-link">Contact</a>
+    
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-leaf"></i>
+        </div>
+        <h3>Eco-Friendly</h3>
+        <p>Reduce textile waste and lower your carbon footprint with every swap</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-coins"></i>
+        </div>
+        <h3>Cost Effective</h3>
+        <p>Refresh your wardrobe without spending money on new clothes</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-award"></i>
+        </div>
+        <h3>Rewarding</h3>
+        <p>Earn points for every swap that you can redeem or donate</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-globe"></i>
+        </div>
+        <h3>Global Community</h3>
+        <p>Connect with fashion lovers who care about the planet</p>
       </div>
     </div>
-  </div>
+  </section>
 
-  <script>
-    // Sample item data
-    const items = [
-      {
-        id: 'ITEM_ID_1',
-        title: 'Vintage Denim Jacket',
-        description: 'Classic blue denim jacket with a timeless look. Perfect for layering in any season.',
-        category: 'outerwear',
-        size: 'm',
-        condition: 'like-new',
-        points: 1200,
-        image: 'https://images.unsplash.com/photo-1601924994987-69e26d50dc26?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80'
-      },
-      {
-        id: 'ITEM_ID_2',
-        title: 'Embroidered Cotton Kurta',
-        description: 'Hand-embroidered white cotton kurta with traditional patterns. Lightweight and breathable.',
-        category: 'tops',
-        size: 'l',
-        condition: 'good',
-        points: 900,
-        image: 'https://images.unsplash.com/photo-1617137968427-85924c800a22?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80'
-      },
-      {
-        id: 'ITEM_ID_3',
-        title: 'Cable-Knit Wool Sweater',
-        description: 'Cozy and warm winter sweater with classic cable-knit pattern. Perfect for cold days.',
-        category: 'tops',
-        size: 's',
-        condition: 'fair',
-        points: 800,
-        image: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1036&q=80'
-      },
-      {
-        id: 'ITEM_ID_4',
-        title: 'Floral Summer Dress',
-        description: 'Lightweight floral dress perfect for summer days. Flowy fabric with comfortable fit.',
-        category: 'dresses',
-        size: 'm',
-        condition: 'new',
-        points: 1100,
-        image: 'https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1035&q=80'
-      },
-      {
-        id: 'ITEM_ID_5',
-        title: 'Vegan Leather Tote',
-        description: 'Stylish and spacious vegan leather tote bag. Perfect for everyday use or work.',
-        category: 'accessories',
-        size: 'one-size',
-        condition: 'like-new',
-        points: 1500,
-        image: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80'
-      },
-      {
-        id: 'ITEM_ID_6',
-        title: 'Linen Blend Shirt',
-        description: 'Premium linen-cotton blend shirt for formal or casual occasions. Wrinkle-resistant.',
-        category: 'tops',
-        size: 'l',
-        condition: 'good',
-        points: 750,
-        image: 'https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80'
-      },
-      {
-        id: 'ITEM_ID_7',
-        title: 'Skinny Jeans',
-        description: 'Dark wash skinny jeans with comfortable stretch fabric. Perfect for everyday wear.',
-        category: 'bottoms',
-        size: 's',
-        condition: 'like-new',
-        points: 850,
-        image: 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80'
-      },
-      {
-        id: 'ITEM_ID_8',
-        title: 'Wool Winter Coat',
-        description: 'Warm and stylish wool winter coat with faux fur collar. Excellent condition.',
-        category: 'outerwear',
-        size: 'm',
-        condition: 'good',
-        points: 1800,
-        image: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1036&q=80'
-      }
-    ];
-
-    // Initialize the page
-    document.addEventListener('DOMContentLoaded', () => {
-      // Render all items initially
-      renderItems(items);
+  <!-- Featured Items -->
+  <section class="featured-section">
+    <div class="section-title">
+      <h2>Trending This Week</h2>
+      <p>Discover the most sought-after items in our community</p>
+    </div>
+    
+    <div class="items-grid">
+      <div class="item-card">
+        <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1936&q=80" alt="Vintage Denim Jacket" class="item-img">
+        <div class="item-info">
+          <span class="item-badge">Popular</span>
+          <h3>Vintage Denim Jacket</h3>
+          <p class="item-price">1200 points</p>
+        </div>
+      </div>
       
-      // Set up filter event listeners
-      document.getElementById('categoryFilter').addEventListener('change', filterItems);
-      document.getElementById('sizeFilter').addEventListener('change', filterItems);
-      document.getElementById('conditionFilter').addEventListener('change', filterItems);
-      document.getElementById('pointsFilter').addEventListener('change', filterItems);
-      document.getElementById('searchInput').addEventListener('input', filterItems);
-      document.getElementById('resetFilters').addEventListener('click', resetFilters);
+      <div class="item-card">
+       <img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1927&q=80" alt="Floral Summer Dress" class="item-img">
+        <div class="item-info">
+          <h3>Classy Summer Dress</h3>
+          <p class="item-price">800 points</p>
+        </div>
+      </div>
+      
+      <div class="item-card">
+       <img src="https://mugdog.in/cdn/shop/files/Tote37.png?v=1728993348" alt="Eco Tote Bag" class="item-img">
+        <div class="item-info">
+          <span class="item-badge">New</span>
+          <h3>Eco Tote Bag</h3>
+          <p class="item-price">500 points</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="testimonials-section">
+    <div class="section-title">
+      <h2>What Our Community Says</h2>
+      <p>Hear from swappers who transformed their wardrobes sustainably</p>
+    </div>
+    
+    <div class="testimonials-slider">
+      <div class="swiper">
+        <div class="swiper-wrapper">
+          <!-- Testimonial 1 -->
+          <div class="swiper-slide">
+            <div class="testimonial-card">
+              <div class="testimonial-content">
+                "I've completely transformed my wardrobe without buying anything new! ReWear helped me discover my personal style while being eco-conscious. The points system is genius - I've donated mine to ocean cleanup initiatives."
+              </div>
+              <div class="testimonial-author">
+                <div class="author-avatar">
+                  <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1976&q=80" alt="Sarah J.">
+                </div>
+                <div class="author-info">
+                  <h4>Sarah J.</h4>
+                  <p>Member since 2022</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Testimonial 2 -->
+          <div class="swiper-slide">
+            <div class="testimonial-card">
+              <div class="testimonial-content">
+                "As a college student, ReWear has been a game-changer. I refresh my wardrobe every season without spending money. The community is amazing - I've made friends who share my passion for sustainable fashion."
+              </div>
+              <div class="testimonial-author">
+                <div class="author-avatar">
+                 <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="Alex M.">
+
+                </div>
+                <div class="author-info">
+                  <h4>Alex M.</h4>
+                  <p>Student Member</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Testimonial 3 -->
+          <div class="swiper-slide">
+            <div class="testimonial-card">
+              <div class="testimonial-content">
+                "I run a small boutique and use ReWear to source unique vintage pieces. The quality of items is outstanding, and I love that I'm supporting circular fashion. My customers can't believe these are second-hand finds!"
+              </div>
+              <div class="testimonial-author">
+                <div class="author-avatar">
+                 <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1976&q=80" alt="Priya K.">
+
+                </div>
+                <div class="author-info">
+                  <h4>Priya K.</h4>
+                  <p>Boutique Owner</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Testimonial Controls -->
+        <div class="swiper-pagination"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="stats-section">
+    <div class="stats-container">
+      <div class="stat-item">
+        <div class="stat-value">25K+</div>
+        <div class="stat-label">Happy Swappers</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">50K+</div>
+        <div class="stat-label">Items Swapped</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">9 Tons</div>
+        <div class="stat-label">Clothing Saved</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">$500K+</div>
+        <div class="stat-label">Community Savings</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section">
+    <div class="cta-container">
+      <h2>Ready to Join the Fashion Revolution?</h2>
+      <p>Sign up today and get 500 bonus points to start your sustainable fashion journey.</p>
+      <div class="cta-buttons">
+        <a href="signup.html" class="cta-btn primary-btn"><i class="fas fa-user-plus"></i> Sign Up Free</a>
+        
+      </div>
+    </div>
+  </section>
+
+  <!-- Premium Footer -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-about">
+        <div class="footer-logo">
+          <img src="images/logo.png" alt="ReWear Logo">
+          <span>ReWear</span>
+        </div>
+        <p>We're on a mission to make fashion sustainable by creating a global community of clothes swappers.</p>
+        <div class="social-links">
+          <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-pinterest"></i></a>
+        </div>
+      </div>
+      
+      <div class="footer-links">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="index.html"><i class="fas fa-chevron-right"></i> Home</a></li>
+          <li><a href="browse.html"><i class="fas fa-chevron-right"></i> Buy Items</a></li>
+          <li><a href="dashboard.html"><i class="fas fa-chevron-right"></i> Sell Items</a></li>
+          <li><a href="dashboard.html"><i class="fas fa-chevron-right"></i> Dashboard</a></li>
+          
+        </ul>
+      </div>
+      
+      <div class="footer-links">
+        <h3>Support</h3>
+        <ul>
+          <li><a href="#"><i class="fas fa-chevron-right"></i> FAQs</a></li>
+          <li><a href="#"><i class="fas fa-chevron-right"></i> Shipping</a></li>
+          <li><a href="#"><i class="fas fa-chevron-right"></i> Returns</a></li>
+          <li><a href="#"><i class="fas fa-chevron-right"></i> Safety Tips</a></li>
+          <li><a href="#"><i class="fas fa-chevron-right"></i> Contact Us</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-newsletter">
+        <h3>Newsletter</h3>
+        <p>Subscribe for sustainable fashion tips and exclusive swap opportunities.</p>
+        <form class="newsletter-form">
+          <input type="email" placeholder="Your email" class="newsletter-input" required>
+          <button type="submit" class="newsletter-btn"><i class="fas fa-paper-plane"></i></button>
+        </form>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <p>&copy; 2024 ReWear. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+  <script>
+    // Initialize Hero Slider
+    const heroSwiper = new Swiper('.hero-slider .swiper', {
+      loop: true,
+      autoplay: {
+        delay: 7000,
+        disableOnInteraction: false,
+      },
+      effect: 'fade',
+      fadeEffect: {
+        crossFade: true
+      },
+      pagination: {
+        el: '.hero-slider .swiper-pagination',
+        clickable: true,
+      },
+      navigation: {
+        nextEl: '.hero-slider .swiper-button-next',
+        prevEl: '.hero-slider .swiper-button-prev',
+      },
     });
 
-    // Function to render items
-    function renderItems(itemsToRender) {
-      const itemGrid = document.getElementById('itemGrid');
-      itemGrid.innerHTML = '';
-      
-      if (itemsToRender.length === 0) {
-        itemGrid.innerHTML = `
-          <div class="no-results">
-            <i class="fas fa-search"></i>
-            <h3>No items match your filters</h3>
-            <p>Try adjusting your filters or search terms</p>
-          </div>
-        `;
-        return;
-      }
-      
-      itemsToRender.forEach(item => {
-        const card = document.createElement('div');
-        card.className = 'item-card';
-        card.innerHTML = `
-          <div class="item-image-container">
-            <img src="${item.image}" alt="${item.title}" class="item-image">
-            <span class="item-badge">${getConditionLabel(item.condition)}</span>
-          </div>
-          <div class="item-content">
-            <h3 class="item-title">${item.title}</h3>
-            <p class="item-description">${item.description}</p>
-            <div class="item-meta">
-              <span class="meta-item"><i class="fas fa-tag"></i> ${item.category.charAt(0).toUpperCase() + item.category.slice(1)}</span>
-              <span class="meta-item"><i class="fas fa-ruler"></i> ${item.size.toUpperCase()}</span>
-            </div>
-            <div class="item-points">
-              <i class="fas fa-coins"></i> ${item.points} points
-            </div>
-            <button onclick="sendSwapRequest('${item.id}')" class="interested-btn">
-              <i class="fas fa-exchange-alt"></i> Request Swap
-            </button>
-          </div>
-        `;
-        itemGrid.appendChild(card);
-      });
-    }
+    // Initialize Testimonials Slider
+    const testimonialSwiper = new Swiper('.testimonials-slider .swiper', {
+      loop: true,
+      autoplay: {
+        delay: 5000,
+      },
+      pagination: {
+        el: '.testimonials-slider .swiper-pagination',
+        clickable: true,
+      },
+    });
 
-    // Function to filter items
-    function filterItems() {
-      const category = document.getElementById('categoryFilter').value;
-      const size = document.getElementById('sizeFilter').value;
-      const condition = document.getElementById('conditionFilter').value;
-      const points = document.getElementById('pointsFilter').value;
-      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-      
-      const filteredItems = items.filter(item => {
-        // Category filter
-        if (category !== 'all' && item.category !== category) return false;
-        
-        // Size filter
-        if (size !== 'all' && item.size !== size) return false;
-        
-        // Condition filter
-        if (condition !== 'all' && item.condition !== condition) return false;
-        
-        // Points filter
-        if (points !== 'all') {
-          if (points === '0-500' && item.points > 500) return false;
-          if (points === '500-1000' && (item.points <= 500 || item.points > 1000)) return false;
-          if (points === '1000-2000' && (item.points <= 1000 || item.points > 2000)) return false;
-          if (points === '2000+' && item.points <= 2000) return false;
-        }
-        
-        // Search filter
-        if (searchTerm && 
-            !item.title.toLowerCase().includes(searchTerm) && 
-            !item.description.toLowerCase().includes(searchTerm)) {
-          return false;
-        }
-        
-        return true;
-      });
-      
-      renderItems(filteredItems);
-    }
-
-    // Function to reset all filters
-    function resetFilters() {
-      document.getElementById('categoryFilter').value = 'all';
-      document.getElementById('sizeFilter').value = 'all';
-      document.getElementById('conditionFilter').value = 'all';
-      document.getElementById('pointsFilter').value = 'all';
-      document.getElementById('searchInput').value = '';
-      renderItems(items);
-    }
-
-    // Helper function to get condition label
-    function getConditionLabel(condition) {
-      const labels = {
-        'new': 'New',
-        'like-new': 'Like New',
-        'good': 'Good',
-        'fair': 'Fair'
-      };
-      return labels[condition] || condition;
-    }
-
-    // Swap request function
-    function sendSwapRequest(itemId) {
-      const token = localStorage.getItem("userToken");
-
-      if (!token) {
-        alert("Please log in to send a swap request.");
-        window.location.href = "login.html";
-        return;
-      }
-
-      // Create a visual feedback element
-      const button = event.currentTarget;
-      const originalText = button.innerHTML;
-      
-      // Change button to loading state
-      button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending Request';
-      button.disabled = true;
-      
-      // Simulate API request with timeout
-      setTimeout(() => {
-        // In a real app, you would use fetch as in your original code
-        // For this demo, we'll simulate a successful response
-        const success = Math.random() > 0.2; // 80% success rate for demo
-        
-        if (success) {
-          button.innerHTML = '<i class="fas fa-check"></i> Request Sent!';
-          button.style.background = 'linear-gradient(135deg, #2E8B57, #1e5a3a)';
-          
-          // Show success notification
-          showNotification('✅ Swap request sent to owner!');
-        } else {
-          button.innerHTML = originalText;
-          button.disabled = false;
-          
-          // Show error notification
-          showNotification('⚠️ Failed to send request. Please try again.');
-        }
-      }, 1500);
-    }
+    // Mobile Menu Toggle
+    const hamburger = document.querySelector('.hamburger');
+    const navLinks = document.querySelector('.nav-links');
     
-    function showNotification(message) {
-      // Create notification element
-      const notification = document.createElement('div');
-      notification.textContent = message;
-      notification.style.position = 'fixed';
-      notification.style.bottom = '20px';
-      notification.style.right = '20px';
-      notification.style.padding = '15px 25px';
-      notification.style.background = 'linear-gradient(135deg, #4CAF50, #2E8B57)';
-      notification.style.color = 'white';
-      notification.style.borderRadius = '12px';
-      notification.style.boxShadow = '0 5px 15px rgba(0,0,0,0.2)';
-      notification.style.zIndex = '1000';
-      notification.style.opacity = '0';
-      notification.style.transform = 'translateY(20px)';
-      notification.style.transition = 'all 0.3s ease';
-      
-      document.body.appendChild(notification);
-      
-      // Animate in
-      setTimeout(() => {
-        notification.style.opacity = '1';
-        notification.style.transform = 'translateY(0)';
-      }, 10);
-      
-      // Remove after delay
-      setTimeout(() => {
-        notification.style.opacity = '0';
-        notification.style.transform = 'translateY(20px)';
-        setTimeout(() => {
-          document.body.removeChild(notification);
-        }, 300);
-      }, 3000);
-    }
+    hamburger.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+      hamburger.innerHTML = navLinks.classList.contains('active') ? 
+        '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+    });
+
+    // Navbar Scroll Effect
+    window.addEventListener('scroll', () => {
+      const navbar = document.querySelector('.navbar');
+      navbar.classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // Animate Stats on Scroll
+    const statsObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('.stat-item').forEach(item => {
+      statsObserver.observe(item);
+    });
+
+    // Smooth Scrolling for Anchor Links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
   </script>
 </body>
-</html>
